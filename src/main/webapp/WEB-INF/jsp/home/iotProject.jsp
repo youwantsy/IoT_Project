@@ -161,27 +161,27 @@
 				<div>CurrentLcd :<input id = "CurrentLcd" value=""/></div>
 			</div>
 			<div>
-				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
+				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
 				<button onclick="fun1('DCSTOP')">STOP</button>
 				<div>CurrentDC :<input id = "CurrentDC" value=""/></div>
 			</div>
 			<div>
-				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
+				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
 				<button onclick="fun1('SVSTOP')">STOP</button>
 				<div>CurrentSV :<input id = "CurrentSV" value=""/></div>
 			</div>
 			<div>
-				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
+				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" value="12" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
 				<button onclick="fun1('SHSTOP')">STOP</button>
 				<div>CurrentSH :<input id = "CurrentSH" value=""/></div>
 			</div>
 			<div>
-				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max = "130" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
+				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max ="130" value="50" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
 				<button onclick="fun1('SWSTOP')">STOP</button>
 				<div>CurrentSW :<input id = "CurrentSW" value=""/></div>
 			</div>
 			<div>
-				Servo_Ultra(40~120) :<input id= "ultraselects" type="number" name="ultraselects" min="40" max = "120" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())"/>
+				Servo_Ultra(40~120) :<input id= "ultraselects" type="number" name="ultraselects" min="40" max ="120" value="40" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())"/>
 				<button onclick="fun1('SUSTOP')">STOP</button>
 				<div>CurrentSU :<input id = "CurrentSU" value=""/></div>
 			</div>
