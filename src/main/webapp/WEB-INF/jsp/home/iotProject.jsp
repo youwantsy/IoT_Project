@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
@@ -17,7 +18,7 @@
 		<script>
 			$(function(){
 				// Create a client instance
-				client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime.toString());
+				client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime().toString());
 				// set callback handlers
 				client.onMessageArrived = onMessageArrived; // callback함수 등록
 				// connect the client
@@ -52,6 +53,7 @@
 					$("#Thermister").attr("value",obj.Thermister);
 					$("#Photoresister").attr("value",obj.Photoresister);
 					$("#Tracking").attr("value",obj.Tracking);
+					
 				}
 
 			}
@@ -61,10 +63,66 @@
 					// Publish a Message
 					message2 = value
 					message = new Paho.MQTT.Message(message2);
-					message.destinationName = "/ledorder";
+					
+					// 명령 값에 따라 토픽 분류 + 현재 상태 출력
+					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 =="N"){
+						message.destinationName = "/order/led";
+						if(message2 == "N"){
+							$("#CurrentLed").attr("value","LED OFF");
+						} else
+							$("#CurrentLed").attr("value","LED ("+ message2 + ") ON");	
+					}
+					
+					if (message2 == "ON" || message2 == "OFF"){
+						message.destinationName = "/order/buzzer";
+						if (message2 == "OFF"){
+							$("#CurrentBuzzer").attr("value", "BUZZER " + message2)
+						} else 
+							$("#CurrentBuzzer").attr("value", "BUZZER " + message2)
+					}
+					
+					if (message2 == "ENABLE" || message2 == "DISABLE"){
+						message.destinationName = "/order/laser";
+						if (message2 == "DISABLE"){
+							$("#CurrentLaser").attr("value", "LASER " + message2)
+						} else 
+							$("#CurrentLaser").attr("value", "LASER " + message2)
+					}
+					
+					
+					if (message2 == "TURNON" || message2 == "TURNOFF"){
+						message.destinationName = "/order/lcd";
+						if (message2 == "TURNOFF"){
+							$("#CurrentLcd").attr("value", "LCD " + message2)
+						} else 
+							$("#CurrentLcd").attr("value", "LCD " + message2)
+					}
+					if (message2.includes("DCGO") || message2 == "DCSTOP"){
+						message.destinationName = "/order/dc";
+						$("#CurrentDC").attr("value", message2)
+					}
+					if (message2.includes("SVGO") || message2 == "SVSTOP"){
+						message.destinationName = "/order/sv";
+						$("#CurrentSV").attr("value", message2)
+					}
+					if (message2.includes("SHGO") || message2 == "SHSTOP"){
+						message.destinationName = "/order/sh";
+						$("#CurrentSH").attr("value", message2)
+					}
+					if (message2.includes("SWGO") || message2 == "SWSTOP"){
+						message.destinationName = "/order/sw";
+						$("#CurrentSW").attr("value", message2)
+					}
+					if (message2.includes("SUGO") || message2 == "SUSTOP"){
+						message.destinationName = "/order/su";
+						$("#CurrentSU").attr("value", message2)
+					}
+					
 					message.qos = 0;
-					console.log(message.payloadString)
+					console.log(message.payloadString);
 					client.send(message);
+
+					
 				}
 		</script>
 	</head>
@@ -85,6 +143,47 @@
 				<button onclick="fun1('G')">LED_GREEN</button>
 				<button onclick="fun1('B')">LED_BLUE</button>
 				<button onclick="fun1('N')">LED_OFF</button>
+				<div>CurrentLed :<input id = "CurrentLed" value=""/></div>
+			</div>
+			<div>
+				<button onclick="fun1('ON')">BUZZER_ON</button>
+				<button onclick="fun1('OFF')">BUZZER_OFF</button>
+				<div>CurrentBuzzer :<input id = "CurrentBuzzer"value=""/></div>
+			</div>
+			<div>
+				<button onclick="fun1('ENABLE')">LASER_ON</button>
+				<button onclick="fun1('DISABLE')">LASER_OFF</button>
+				<div>CurrentLaser :<input id = "CurrentLaser" value=""/></div>
+			</div>
+			<div>
+				<button onclick="fun1('TURNON')">LCD_ON</button>
+				<button onclick="fun1('TURNOFF')">LCD_OFF</button>
+				<div>CurrentLcd :<input id = "CurrentLcd" value=""/></div>
+			</div>
+			<div>
+				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
+				<button onclick="fun1('DCSTOP')">STOP</button>
+				<div>CurrentDC :<input id = "CurrentDC" value=""/></div>
+			</div>
+			<div>
+				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
+				<button onclick="fun1('SVSTOP')">STOP</button>
+				<div>CurrentSV :<input id = "CurrentSV" value=""/></div>
+			</div>
+			<div>
+				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
+				<button onclick="fun1('SHSTOP')">STOP</button>
+				<div>CurrentSH :<input id = "CurrentSH" value=""/></div>
+			</div>
+			<div>
+				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max = "130" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
+				<button onclick="fun1('SWSTOP')">STOP</button>
+				<div>CurrentSW :<input id = "CurrentSW" value=""/></div>
+			</div>
+			<div>
+				Servo_Ultra(40~120) :<input id= "ultraselects" type="number" name="ultraselects" min="40" max = "120" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())"/>
+				<button onclick="fun1('SUSTOP')">STOP</button>
+				<div>CurrentSU :<input id = "CurrentSU" value=""/></div>
 			</div>
 	</body>
 </html>
