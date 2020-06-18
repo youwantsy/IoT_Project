@@ -65,7 +65,7 @@
 					message = new Paho.MQTT.Message(message2);
 					
 					// 명령 값에 따라 토픽 분류 + 현재 상태 출력
-					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 =="N"){
+					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 == "W" || message2 =="N"){
 						message.destinationName = "/order/led";
 						if(message2 == "N"){
 							$("#CurrentLed").attr("value","LED OFF");
@@ -75,27 +75,22 @@
 					
 					if (message2 == "ON" || message2 == "OFF"){
 						message.destinationName = "/order/buzzer";
-						if (message2 == "OFF"){
-							$("#CurrentBuzzer").attr("value", "BUZZER " + message2)
-						} else 
-							$("#CurrentBuzzer").attr("value", "BUZZER " + message2)
+						$("#CurrentBuzzer").attr("value", "BUZZER " + message2);
 					}
 					
 					if (message2 == "ENABLE" || message2 == "DISABLE"){
 						message.destinationName = "/order/laser";
-						if (message2 == "DISABLE"){
-							$("#CurrentLaser").attr("value", "LASER " + message2)
-						} else 
-							$("#CurrentLaser").attr("value", "LASER " + message2)
+						$("#CurrentLaser").attr("value", "LASER " + message2)
 					}
 					
+					if (message2 == "MODEON" || message2 == "MODEOFF"){
+						message.destinationName = "/order/mode";
+						$("#CurrentMODE").attr("value", "CONTROL" + message2)
+					}
 					
 					if (message2 == "TURNON" || message2 == "TURNOFF"){
 						message.destinationName = "/order/lcd";
-						if (message2 == "TURNOFF"){
-							$("#CurrentLcd").attr("value", "LCD " + message2)
-						} else 
-							$("#CurrentLcd").attr("value", "LCD " + message2)
+						$("#CurrentLcd").attr("value", "LCD " + message2);
 					}
 					if (message2.includes("DCGO") || message2 == "DCSTOP"){
 						message.destinationName = "/order/dc";
@@ -130,60 +125,75 @@
 	<body>
 		<h5 class="alert alert-info">/home/exam19_mqtt.jsp</h5>		
 		<img id="cameraView"/>
-		<div>
-		
-			<div>GAS :<input id = "Gas" value=""/></div>
-			<div>Thermister :<input id = "Thermister" value=""/></div>
-			<div>Photoresister :<input id = "Photoresister" value=""/></div>
-			<div>Ultrasonic :<input id = "Ultrasonic" value=""/></div>
-			<div>Tracking :<input id = "Tracking" value=""/></div>
-		</div>
+			<div>			
+				<div>GAS :<input id = "Gas" value=""/></div>
+				<div>Thermister :<input id = "Thermister" value=""/></div>
+				<div>Photoresister :<input id = "Photoresister" value=""/></div>
+				<div>Ultrasonic :<input id = "Ultrasonic" value=""/></div>
+				<div>Tracking :<input id = "Tracking" value=""/></div>
+			</div>
+
 			<div>
 				<button onclick="fun1('R')">LED_RED</button>
 				<button onclick="fun1('G')">LED_GREEN</button>
 				<button onclick="fun1('B')">LED_BLUE</button>
+				<button onclick="fun1('W')">LED_WHITE</button>
 				<button onclick="fun1('N')">LED_OFF</button>
 				<div>CurrentLed :<input id = "CurrentLed" value=""/></div>
 			</div>
+
 			<div>
 				<button onclick="fun1('ON')">BUZZER_ON</button>
 				<button onclick="fun1('OFF')">BUZZER_OFF</button>
 				<div>CurrentBuzzer :<input id = "CurrentBuzzer"value=""/></div>
 			</div>
+
 			<div>
 				<button onclick="fun1('ENABLE')">LASER_ON</button>
 				<button onclick="fun1('DISABLE')">LASER_OFF</button>
 				<div>CurrentLaser :<input id = "CurrentLaser" value=""/></div>
 			</div>
+
 			<div>
 				<button onclick="fun1('TURNON')">LCD_ON</button>
 				<button onclick="fun1('TURNOFF')">LCD_OFF</button>
 				<div>CurrentLcd :<input id = "CurrentLcd" value=""/></div>
 			</div>
+
 			<div>
 				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
 				<button onclick="fun1('DCSTOP')">STOP</button>
 				<div>CurrentDC :<input id = "CurrentDC" value=""/></div>
 			</div>
-			<div>
-				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
-				<button onclick="fun1('SVSTOP')">STOP</button>
-				<div>CurrentSV :<input id = "CurrentSV" value=""/></div>
-			</div>
-			<div>
-				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" value="12" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
-				<button onclick="fun1('SHSTOP')">STOP</button>
-				<div>CurrentSH :<input id = "CurrentSH" value=""/></div>
-			</div>
+	
 			<div>
 				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max ="130" value="50" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
 				<button onclick="fun1('SWSTOP')">STOP</button>
 				<div>CurrentSW :<input id = "CurrentSW" value=""/></div>
 			</div>
+			
+			<div>
+				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
+				<button onclick="fun1('SVSTOP')">STOP</button>
+				<div>CurrentSV :<input id = "CurrentSV" value=""/></div>
+			</div>
+
+			<div>
+				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" value="12" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
+				<button onclick="fun1('SHSTOP')">STOP</button>
+				<div>CurrentSH :<input id = "CurrentSH" value=""/></div>
+			</div>
+
 			<div>
 				Servo_Ultra(40~120) :<input id= "ultraselects" type="number" name="ultraselects" min="40" max ="120" value="40" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())"/>
 				<button onclick="fun1('SUSTOP')">STOP</button>
 				<div>CurrentSU :<input id = "CurrentSU" value=""/></div>
+			</div>
+
+			<div>
+				<button onclick="fun1('MODEON')">CONTROL_MODE_ON</button>
+				<button onclick="fun1('MODEOFF')">CONTROL_MODE_OFF</button>
+				<div>CurrentMODE :<input id = "CurrentMODE" value=""/></div>
 			</div>
 	</body>
 </html>
