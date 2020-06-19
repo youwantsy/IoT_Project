@@ -6,24 +6,18 @@
 		<meta charset="UTF-8">
 		<title>Insert title here</title>
 		
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
-		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resource/bootstrap/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.css">
-		<script src="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.js"></script>
-		
-		
+				
 		<script src="https://code.highcharts.com/stock/highstock.js"></script>
 		<script src="https://code.highcharts.com/stock/modules/data.js"></script>
 		<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 		<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-		
+		<script src="${pageContext.request.contextPath}/resource/test.json"></script>
 		<div id="container" style="height: 400px; min-width: 310px"></div>
-		
+
 		<script>
+				m = 0
 				$(function(){
 					client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime().toString());
 					client.onMessageArrived = onMessageArrived;
@@ -37,18 +31,29 @@
 				
 				function onMessageArrived(message)
 				{				
+					console.log("실행1")
+					console.log(message.payloadString)
+					m = message.payloadString
+					console.log(m)
 					if(message.destinationName =="/ultra")
 					{
-						const json2 = message.payloadString;
-						const obj2 = JSON.parse(json2);
+						console.log("실행2")	
+						var obj = JSON.parse(message.payloadString);
 						
-						$("#Ultrasonic").attr("value",obj2.Ultrasonic);
+						var ultravalue = obj.Ultrasonic
+					
+						
+						$("#Ultrasonic").attr("value",ultravalue);
 					}
-		
-		
-				Highcharts.getJSON(json2,
-						
-				function (data) {
+					
+				}
+				</script>
+				<script>
+				
+				
+				
+				//var json = (test)
+				Highcharts.getJSON("${pageContext.request.contextPath}/resource/test.json" , function (data) {
 	
 			    var startDate = new Date(data[data.length - 1][0]), // Get year of last data point
 			        minRate = 1,
