@@ -24,11 +24,4 @@ public class HomeController
 		LOGGER.info("실행");
 		return "home/iotProject";
 	}
-	
-	@RequestMapping("/iotProject2.do")
-	public String iotProject2()
-	{
-		LOGGER.info("실행");
-		return "home/iotProject2";
-	}
 }
