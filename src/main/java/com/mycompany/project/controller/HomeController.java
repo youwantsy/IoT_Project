@@ -18,10 +18,17 @@ public class HomeController
 		return "home/main";
 	}
 	
-		@RequestMapping("/iotProject.do")
+	@RequestMapping("/iotProject.do")
 	public String iotProject()
 	{
 		LOGGER.info("실행");
 		return "home/iotProject";
+	}
+	
+	@RequestMapping("/iotProject2.do")
+	public String iotProject2()
+	{
+		LOGGER.info("실행");
+		return "home/iotProject2";
 	}
 }
