@@ -23,5 +23,9 @@
 		<ul>
 			<li><a href="iotProject.do">iotProject.do</a><li>
 		</ul>
+		
+		<ul>
+			<li><a href="distanceView.do">distanceView</a><li>
+		</ul>
 	</body>
 </html>

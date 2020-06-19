@@ -24,4 +24,11 @@ public class HomeController
 		LOGGER.info("실행");
 		return "home/iotProject";
 	}
+	
+	@RequestMapping("/distanceView.do")
+	public String distanceView()
+	{
+		LOGGER.info("실행");
+		return "home/distanceView";
+	}
 }

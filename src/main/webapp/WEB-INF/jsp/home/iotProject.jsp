@@ -17,15 +17,11 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
 		<script>
 			$(function(){
-				// Create a client instance
 				client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime().toString());
-				// set callback handlers
-				client.onMessageArrived = onMessageArrived; // callback함수 등록
-				// connect the client
+				client.onMessageArrived = onMessageArrived;
 				client.connect({onSuccess:onConnect});
 			});
-			
-			// called when the client connects
+
 			function onConnect() {
 				console.log("mqtt broker connected")
 				client.subscribe("/sensor");
@@ -33,7 +29,6 @@
 				client.subscribe("/ultra");
 			}
 			
-		
 			function onMessageArrived(message)
 			{				
 				if(message.destinationName =="/camerapub")
@@ -41,12 +36,14 @@
 					$("#cameraView").attr("src", "data:image/jpg;base64,"+ message.payloadString);
 					$("#cameraView2").attr("src", "data:image/jpg;base64,"+ message.payloadString);
 				}
+				
 				if(message.destinationName =="/ultra")
 				{
 					const json2 = message.payloadString;
 					const obj2 = JSON.parse(json2);
 					$("#Ultrasonic").attr("value",obj2.Ultrasonic);
 				}
+				
 				if(message.destinationName =="/sensor")
 				{
 					const json = message.payloadString;
