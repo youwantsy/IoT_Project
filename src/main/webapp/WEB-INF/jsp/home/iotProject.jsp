@@ -37,7 +37,10 @@
 			function onMessageArrived(message)
 			{				
 				if(message.destinationName =="/camerapub")
+				{		
 					$("#cameraView").attr("src", "data:image/jpg;base64,"+ message.payloadString);
+					$("#cameraView2").attr("src", "data:image/jpg;base64,"+ message.payloadString);
+				}
 				if(message.destinationName =="/ultra")
 				{
 					const json2 = message.payloadString;
@@ -123,8 +126,9 @@
 	</head>
 
 	<body>
-		<h5 class="alert alert-info">/home/exam19_mqtt.jsp</h5>		
-		<img id="cameraView"/>
+		<div>
+			<img id="cameraView"/>
+			
 			<div>			
 				<div>GAS :<input id = "Gas" value=""/></div>
 				<div>Thermister :<input id = "Thermister" value=""/></div>
@@ -195,5 +199,26 @@
 				<button onclick="fun1('MODEOFF')">CONTROL_MODE_OFF</button>
 				<div>CurrentMODE :<input id = "CurrentMODE" value=""/></div>
 			</div>
+			<div>
+				<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
+				<img width="100%" id = "cameraView2"> 
+				</img>
+				<script>
+				var elem = document.getElementById("cameraView2");
+				function openFullscreen() {
+				  if (elem.requestFullscreen) {
+				    elem.requestFullscreen();
+				  } else if (elem.mozRequestFullScreen) { /* Firefox */
+				    elem.mozRequestFullScreen();
+				  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+				    elem.webkitRequestFullscreen();
+				  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+				    elem.msRequestFullscreen();
+				  }
+				}
+				</script>
+			</div>
+		
+		</div>
 	</body>
 </html>
