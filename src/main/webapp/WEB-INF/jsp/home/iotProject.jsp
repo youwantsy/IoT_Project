@@ -117,12 +117,10 @@
 					message.qos = 0;
 					console.log(message.payloadString);
 					client.send(message);
-
-					
 				}
 
 				var start;
-		
+/* 				var controlcnt = 0; */
 				window.addEventListener("gamepadconnected", function(e) {
 					  var gp = navigator.getGamepads()[e.gamepad.index];
 
@@ -159,12 +157,18 @@
 					  }
 					  return b == 1.0;
 					}
-				var count = 0
-				var svgo = 12
-				var shgo = 90
-				var prebuzzerflag = false
-				var prelaserflag = false
+					var count = 0
+					var svgo = 12
+					var shgo = 90
+					var swgo = 90
+					var sugo = 80
+					var dc = 0
+					var prebuzzerflag = false
+					var prelaserflag = false
+				
 					function gameLoop() {
+/* 					controlcnt++;
+					if(controlcnt > 2){ */
 					  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 					  if (!gamepads) {
 					    return;
@@ -256,7 +260,7 @@
 
 					 }
 					 
-//////////////////////////// LASER ////////////////////////////////////////
+//////////////////////////// LASER /////////////////////////////////////////////////
 					 if (buttonPressed(gp.buttons[7]))
 					  {
 						    message2 = "ENABLE"
@@ -320,7 +324,8 @@
 					 }
 				 
 					 if (buttonPressed(gp.buttons[15]))
-					  { shgo--;
+					  { 
+						 shgo--;
 					    if(shgo < 12)
 				    	{shgo = 12}
 				    
@@ -340,6 +345,66 @@
 						    $("#CurrentDC").attr("value", "DC" + message2);
 					
 					 }
+					 if(gp.axes[1] > 0.5)
+					 {
+						 dc--;
+						
+						 if(dc<12)
+							 {
+							 if(dc<-80){
+								 dc = -80; 
+							 }
+							 if(dc<0)
+							 	dc2 = -1*dc
+							 else
+								 dc2 =dc;
+							 message2 = "DCBACKGO" + dc2;
+							message = new Paho.MQTT.Message(message2); 
+							message.destinationName = "/order/dc"
+							client.send(message);
+							$("#CurrentDC").attr("value", message2)
+							 }
+						 else{
+							 message2 = "DCGO" + dc;
+								message = new Paho.MQTT.Message(message2); 
+								message.destinationName = "/order/dc"
+								client.send(message);
+								$("#CurrentDC").attr("value", message2)
+						 }
+						
+					}
+					 else if(gp.axes[1] < -0.5)
+					{
+						 dc++;
+						 if (dc >11)
+						 {
+							if(dc > 80){
+								dc = 80;
+							}
+							message2 = "DCGO" + dc;
+							message = new Paho.MQTT.Message(message2); 
+							message.destinationName = "/order/dc"
+							client.send(message);
+							$("#CurrentDC").attr("value", message2)
+						 }
+						 else
+						 {
+							 if(dc<-80){
+								 dc = -80; 
+						 }
+							 if(dc<0)
+							 	dc2 = -1*dc
+							 else
+								 dc2 =dc;
+							 message2 = "DCBACKGO" + dc2;
+							 message = new Paho.MQTT.Message(message2); 
+							 message.destinationName = "/order/dc"
+							 client.send(message);
+							 $("#CurrentDC").attr("value", message2)
+						 }
+					}
+					 
+					 
 //////////////////////////////// 서보모터 초기화 ///////////////////////////////////////////////////
 					 if (buttonPressed(gp.buttons[11]))
 					  {
@@ -361,156 +426,56 @@
 						    $("#CurrentSW").attr("value", "SW " + message2);
 						    $("#CurrentSU").attr("value", "SU" + message2);
 					 }
-					 if (axes)
-					  
-					  
+//////////////////////////// WHEEL SERVO ///////////////////////////////////////////					 
+					 if(gp.axes[0] > 0.5){
+						 swgo++;
+						    if(swgo > 130)
+						    	{swgo = 130}
+						    
+						 	message2 = "SWGO"+swgo;
+						    message = new Paho.MQTT.Message(message2);
+						    message.destinationName = "/order/sw";
+						    client.send(message);
+						    $("#CurrentSW").attr("value", "SW" + message2);
+						    sugo = 170-swgo;
+						    message2 = "SUGO"+sugo;
+						    message = new Paho.MQTT.Message(message2);
+						    message.destinationName = "/order/su";
+						    client.send(message);
+						    $("#CurrentSU").attr("value", "SU" + message2);
+					 }
+					 else if(gp.axes[0] < -0.5)
+					 {
+						 swgo--;
+						    if(swgo < 50)
+					    	{swgo = 50}
+					    
+					 		message2 = "SWGO"+swgo;
+					        message = new Paho.MQTT.Message(message2);
+							    message.destinationName = "/order/sw";
+							    client.send(message);
+							    $("#CurrentSW").attr("value", "SW" + message2);
+							    sugo = 170-swgo;
+							    message2 = "SUGO"+sugo;
+							    message = new Paho.MQTT.Message(message2);
+							    message.destinationName = "/order/su";
+							    client.send(message);
+							    $("#CurrentSU").attr("value", "SU" + message2);
+					 }
+					 
+					 
+					 console.log(gp.axes[1])
 					  
 					  //message.qos = 0;
 					  //console.log(message.payloadString);
 					  
 					  start = requestAnimationFrame(gameLoop);
-					}
-		
-		/*  
-		var haveEvents = 'GamepadEvent' in window;
-		 var haveWebkitEvents = 'WebKitGamepadEvent' in window;
-		 var controllers = {};
-		 var rAF = window.mozRequestAnimationFrame ||
-		   window.webkitRequestAnimationFrame ||
-		   window.requestAnimationFrame;
+/* 					 controlcnt = 0;
+					} */
+				
+				}
 
-		 function connecthandler(e) {
-		   addgamepad(e.gamepad);
-		 }
-		 function addgamepad(gamepad) {
-		   controllers[gamepad.index] = gamepad; var d = document.createElement("div");
-		   d.setAttribute("id", "controller" + gamepad.index);
-		   var t = document.createElement("h1");
-		   t.appendChild(document.createTextNode("gamepad: " + gamepad.id));
-		   d.appendChild(t);
-		   var b = document.createElement("div");
-		   b.className = "buttons";
-		   for (var i=0; i<gamepad.buttons.length; i++) {
-		     var e = document.createElement("span");
-		     e.className = "button";
-		     //e.id = "b" + i;
-		     e.innerHTML = i;
-		     b.appendChild(e);
-		   }
-		   d.appendChild(b);
-		   var a = document.createElement("div");
-		   a.className = "axes";
-		   for (i=0; i<gamepad.axes.length; i++) {
-		     e = document.createElement("meter");
-		     e.className = "axis";
-		     //e.id = "a" + i;
-		     e.setAttribute("min", "-1");
-		     e.setAttribute("max", "1");
-		     e.setAttribute("value", "0");
-		     e.innerHTML = i;
-		     a.appendChild(e);
-		   }
-		   d.appendChild(a);
-		   document.getElementById("start").style.display = "none";
-		   document.body.appendChild(d);
-		   rAF(updateStatus);
-		 }
-
-		 function disconnecthandler(e) {
-		   removegamepad(e.gamepad);
-		 }
-
-		 function removegamepad(gamepad) {
-		   var d = document.getElementById("controller" + gamepad.index);
-		   document.body.removeChild(d);
-		   delete controllers[gamepad.index];
-		 }
-
-		 function updateStatus() {
-		   scangamepads();
-		   console.log("실행1");
-		   for (j in controllers) {
-		     var controller = controllers[j];
-		     var d = document.getElementById("controller" + j);
-		     var buttons = d.getElementsByClassName("button");
-		     for (var i=0; i<controller.buttons.length; i++) { //
-		       var b = buttons[i];
-		    
-		       var val = controller.buttons[i];
-		       var pressed = val == 1.0;
-		       var touched = false;
-		       if (typeof(val) == "object") {
-		         pressed = val.pressed;
-		         console.log("실행2");
-		         if ('touched' in val) {
-		           touched = val.touched;
-		           console.log("실행3");
-		         }
-		         val = val.value;
-		       }
-		       var pct = Math.round(val * 100) + "%";
-		       b.style.backgroundSize = pct + " " + pct;
-		       b.className = "button";
-		       if (pressed) {
-		    	   message2 = 'B'
-					   message = new Paho.MQTT.Message(message2);
-			    	   message.destinationName = "/order/led";
-			    	   $("#CurrentLed").attr("value","LED ("+ message2 + ") ON");	
-			    	   message.qos = 0;
-						console.log(message.payloadString);
-						client.send(message);
-		    	   console.log("실행4");
-		         b.className += " pressed";
-		       }
-		      
-		     }
-
-		     var axes = d.getElementsByClassName("axis");
-		     for (var i=0; i<controller.axes.length; i++) {
-		    	 console.log("실행6");
-		       var a = axes[i];
-		       a.innerHTML = i + ": " + controller.axes[i].toFixed(4);
-		       a.setAttribute("value", controller.axes[i]);
-		     }
-		   }
-		   rAF(updateStatus);
-		 }
-
-		 function scangamepads() {
-		   var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
-		   console.log("실행7");
-		   for (var i = 0; i < gamepads.length; i++) {
-		     if (gamepads[i] && (gamepads[i].index in controllers)) {
-		    	 console.log("실행8");
-		       controllers[gamepads[i].index] = gamepads[i];
-		     }
-		   }
-		 }
-
-		 if (haveEvents) {
-		   window.addEventListener("gamepadconnected", connecthandler);
-		   window.addEventListener("gamepaddisconnected", disconnecthandler);
-		 } else if (haveWebkitEvents) {
-		   window.addEventListener("webkitgamepadconnected", connecthandler);
-		   window.addEventListener("webkitgamepaddisconnected", disconnecthandler);
-		 } else {
-		   setInterval(scangamepads, 500);
-		 } */
-
-		</script>
-		
-		<!--
-
-Gamepad API Test
-
-Written in 2013 by Ted Mielczarek <ted@mielczarek.org>
-
-To the extent possible under law, the author(s) have dedicated all copyright and related and neighboring rights to this software to the public domain worldwide. This software is distributed without any warranty.
-
-You should have received a copy of the CC0 Public Domain Dedication along with this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
-
--->
-<script type="text/javascript"></script>
+				</script>
 <style>
 .axes {
   padding: 1em;
