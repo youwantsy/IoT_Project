@@ -39,7 +39,7 @@
  					const nDate = new Date();
 					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
 		            console.log(v);
-					var a= {x:v,y:obj.Gas}
+					var a= {x:v,y:obj.Thermister}
 		            chart.series[0].addPoint(a, true, shift);
 				}
 			}
@@ -54,7 +54,7 @@
 			            }
 			        },
 			        title: {
-			            text: 'Live random data'
+			            text: 'Temperature Sensor'
 			        },
 			        xAxis: {
 			            type: 'datetime',
@@ -65,7 +65,7 @@
 			            minPadding: 0.2,
 			            maxPadding: 0.2,
 			            title: {
-			                text: 'Centimeter',
+			                text: 'Celsius',
 			                margin: 80
 			            }
 			        },

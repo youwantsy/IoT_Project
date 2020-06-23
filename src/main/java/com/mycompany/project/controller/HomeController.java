@@ -18,15 +18,13 @@ public class HomeController
 	}
 	
 	@RequestMapping("/iotProject.do")
-	public String iotProject()
-	{
+	public String iotProject(){
 		LOGGER.info("실행");
 		return "home/iotProject";
 	}
 	
 	@RequestMapping("/distanceView.do")
-	public String distanceView()
-	{
+	public String distanceView(){
 		LOGGER.info("실행");
 		return "home/distanceView";
 	}
