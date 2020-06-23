@@ -32,8 +32,8 @@ public class HomeController
 	public String ultra() {
 		return "home/ultraGraph"; 
 	}
-	@RequestMapping("/gasGraph.do")
+	@RequestMapping("/temperatureGraph.do")
 	public String gas() {
-		return "home/gasGraph"; 
+		return "home/temperatureGraph"; 
 	}
 }
