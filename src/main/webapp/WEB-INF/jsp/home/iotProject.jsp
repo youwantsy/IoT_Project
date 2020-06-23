@@ -162,13 +162,12 @@
 					var shgo = 90
 					var swgo = 90
 					var sugo = 80
-					var dc = 0
+					var dc = 13
 					var prebuzzerflag = false
 					var prelaserflag = false
-				
+					var ctrlflags = true
+					
 					function gameLoop() {
-/* 					controlcnt++;
-					if(controlcnt > 2){ */
 					  var gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads : []);
 					  if (!gamepads) {
 					    return;
@@ -176,9 +175,36 @@
 				      var message = null;
 					  
 					  var gp = gamepads[0];
-					  
+////////////////////////////AUTO MODE////////////////////////////////////////
+						 if(buttonPressed(gp.buttons[4]) && ctrlflags == true)
+						 {
+							 count++;
+							 if (count >8){
+							ctrlflags = false; 	
+							message2 = "MODEOFF"
+							message = new Paho.MQTT.Message(message2);
+							message.destinationName = "/order/mode";
+							client.send(message);
+							$("#CurrentMODE").attr("value", "CONTROL" + message2)
+							count = 0;
+							}
+						 }
+////////////////////////////CTRL MODE////////////////////////////////////////
+						 else if(buttonPressed(gp.buttons[5]) && ctrlflags == false)
+						 {
+							 count++;
+							 if (count >8){
+							message2 = "MODEON"
+						 	ctrlflags = true;
+							message = new Paho.MQTT.Message(message2);
+							message.destinationName = "/order/mode";
+							client.send(message);
+							$("#CurrentMODE").attr("value", "CONTROL" + message2)
+							count = 0;
+						    }
+						 }
 ///////////////////////////////////// LED /////////////////////////////////////////////
-					  if (buttonPressed(gp.buttons[0])) 
+					  if (buttonPressed(gp.buttons[0]) && ctrlflags == true) 
 					  {
 						    count++;
 						    if (count >8){
@@ -190,7 +216,7 @@
 							count = 0;
 						    }
 					  } 
-					  else if (buttonPressed(gp.buttons[1])) 
+					  else if (buttonPressed(gp.buttons[1]) && ctrlflags == true) 
 					  {
 						  count++;
 						    if (count >8){
@@ -202,7 +228,7 @@
 							count = 0;
 						    }						
 					  } 
-					  else if (buttonPressed(gp.buttons[2]))
+					  else if (buttonPressed(gp.buttons[2]) && ctrlflags == true)
 					  {
 						  count++;
 						    if (count >8){
@@ -213,7 +239,7 @@
 						    $("#CurrentLed").attr("value","LED ("+ message2 + ") ON");
 						    count = 0;
 						    }
-					 }else if (buttonPressed(gp.buttons[3]))
+					 }else if (buttonPressed(gp.buttons[3]) && ctrlflags == true)
 					  {
 						  count++;
 						    if (count >8){
@@ -224,7 +250,7 @@
 						    $("#CurrentLed").attr("value","LED ("+ message2 + ") ON");
 						    count = 0;
 						    }
-					 }else if (buttonPressed(gp.buttons[9]))
+					 }else if (buttonPressed(gp.buttons[9]) && ctrlflags == true)
 					  {
 						  count++;
 						    if (count >8){
@@ -237,7 +263,7 @@
 						    }
 					 }
 //////////////////////////// BUZZER //////////////////////////////////////
-					  if (buttonPressed(gp.buttons[6]))
+					  if (buttonPressed(gp.buttons[6]) && ctrlflags == true)
 					  {
 						//버 저  
 						    message2 = "ON"
@@ -247,7 +273,7 @@
 						    $("#CurrentBuzzer").attr("value", "BUZZER " + message2);
 						    prebuzzerflag= true;
 					 }
-					 else if (!buttonPressed(gp.buttons[6]))
+					 else if (!buttonPressed(gp.buttons[6]) && ctrlflags == true)
 					  {
 						 if (prebuzzerflag){ 
 						    message2 = "OFF"
@@ -261,7 +287,7 @@
 					 }
 					 
 //////////////////////////// LASER /////////////////////////////////////////////////
-					 if (buttonPressed(gp.buttons[7]))
+					 if (buttonPressed(gp.buttons[7]) && ctrlflags == true)
 					  {
 						    message2 = "ENABLE"
 						    message = new Paho.MQTT.Message(message2);
@@ -269,7 +295,7 @@
 						    client.send(message);
 						    $("#CurrentLaser").attr("value", "LASER " + message2);
 						    prelaserflag= true;
-					 }else if (!buttonPressed(gp.buttons[7]))
+					 }else if (!buttonPressed(gp.buttons[7]) && ctrlflags == true)
 					  {			
 						 if (prelaserflag){ 
 						 		message2 = "DISABLE"
@@ -281,7 +307,7 @@
 						 	} 
 					 }
 //////////////////////////// 카메라 서보 vertical //////////////////////////////////////////////						 
-					 if (buttonPressed(gp.buttons[12]))
+					 if (buttonPressed(gp.buttons[12]) && ctrlflags == true)
 					  {
 						 	svgo++;
 						    if(svgo > 90)
@@ -295,7 +321,7 @@
 					
 					 }
 					 
-					 if (buttonPressed(gp.buttons[13]))
+					 if (buttonPressed(gp.buttons[13]) && ctrlflags == true)
 					  {
 						 svgo--;
 						 if(svgo < 5)
@@ -309,7 +335,7 @@
 					 }
 
 ////////////////////////////카메라 서보 horizon //////////////////////////////////////////////				 
-					 if (buttonPressed(gp.buttons[14]))
+					 if (buttonPressed(gp.buttons[14]) && ctrlflags == true)
 					  {
 						 shgo++;
 						    if(shgo > 170)
@@ -323,7 +349,7 @@
 					
 					 }
 				 
-					 if (buttonPressed(gp.buttons[15]))
+					 if (buttonPressed(gp.buttons[15]) && ctrlflags == true)
 					  { 
 						 shgo--;
 					    if(shgo < 12)
@@ -334,18 +360,21 @@
 						    message.destinationName = "/order/sh";
 						    client.send(message);
 						    $("#CurrentSH").attr("value", "SH " + message2);
+					  }
+
 /////////////////////////////// DCMOTOR ////////////////////////////////////////////////////
-					 }
-					 if (buttonPressed(gp.buttons[10]))
+					 
+					 if (buttonPressed(gp.buttons[11]) && ctrlflags == true)
 					  { 
 						message2 = "DCSTOP";
 				        message = new Paho.MQTT.Message(message2);
 						    message.destinationName = "/order/dc";
 						    client.send(message);
+						    dc = 0;
 						    $("#CurrentDC").attr("value", "DC" + message2);
 					
 					 }
-					 if(gp.axes[1] > 0.5)
+					 if(gp.axes[3] > 0.5 && ctrlflags == true)
 					 {
 						 dc--;
 						
@@ -373,7 +402,7 @@
 						 }
 						
 					}
-					 else if(gp.axes[1] < -0.5)
+					 else if(gp.axes[3] < -0.5 && ctrlflags == true)
 					{
 						 dc++;
 						 if (dc >11)
@@ -406,7 +435,7 @@
 					 
 					 
 //////////////////////////////// 서보모터 초기화 ///////////////////////////////////////////////////
-					 if (buttonPressed(gp.buttons[11]))
+					 if (buttonPressed(gp.buttons[10]) && ctrlflags == true)
 					  {
 				 		message2 = "STOP"
 				        message = new Paho.MQTT.Message("SV"+message2);
@@ -427,7 +456,7 @@
 						    $("#CurrentSU").attr("value", "SU" + message2);
 					 }
 //////////////////////////// WHEEL SERVO ///////////////////////////////////////////					 
-					 if(gp.axes[0] > 0.5){
+					 if(gp.axes[0] > 0.5 && ctrlflags == true) {
 						 swgo++;
 						    if(swgo > 130)
 						    	{swgo = 130}
@@ -444,7 +473,7 @@
 						    client.send(message);
 						    $("#CurrentSU").attr("value", "SU" + message2);
 					 }
-					 else if(gp.axes[0] < -0.5)
+					 else if(gp.axes[0] < -0.5 && ctrlflags == true)
 					 {
 						 swgo--;
 						    if(swgo < 50)
@@ -462,17 +491,8 @@
 							    client.send(message);
 							    $("#CurrentSU").attr("value", "SU" + message2);
 					 }
-					 
-					 
 					 console.log(gp.axes[1])
-					  
-					  //message.qos = 0;
-					  //console.log(message.payloadString);
-					  
-					  start = requestAnimationFrame(gameLoop);
-/* 					 controlcnt = 0;
-					} */
-				
+					 start = requestAnimationFrame(gameLoop);
 				}
 
 				</script>
