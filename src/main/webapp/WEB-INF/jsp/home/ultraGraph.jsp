@@ -47,8 +47,9 @@
 
  					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
 					console.log(nDate);
+					//var v = nDate.getSeconds();
 					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
-		            console.log(v);
+		           // console.log(v);
 					var a= {x:v,y:obj2.Ultrasonic}
 		            chart.series[0].addPoint(a, true, shift);
 		            console.log("씨5")
@@ -67,7 +68,7 @@
 			            }
 			        },
 			        title: {
-			            text: 'Live random data'
+			            text: 'UltraSonic'
 			        },
 			        xAxis: {
 			            type: 'datetime',
