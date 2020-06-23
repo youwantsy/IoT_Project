@@ -22,8 +22,9 @@
 		
 		<ul>
 			<li><a href="iotProject.do">iotProject.do</a><li>
-			<li><a href="distanceView.do">distanceView</a><li>
+			<li><a href="ultraGraph.do">ultraGraph</a></li>		
 		</ul>
+		
 		
 	
 			

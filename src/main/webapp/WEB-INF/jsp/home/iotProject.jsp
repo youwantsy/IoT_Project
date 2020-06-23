@@ -33,6 +33,7 @@
 				if(message.destinationName =="/camerapub") {		
 					$("#cameraView").attr("src", "data:image/jpg;base64,"+ message.payloadString);
 					$("#cameraView2").attr("src", "data:image/jpg;base64,"+ message.payloadString);
+					
 				}
 				
 				if(message.destinationName =="/ultra") {
