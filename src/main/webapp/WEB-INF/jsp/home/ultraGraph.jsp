@@ -48,7 +48,7 @@
 					var a= {x:v,y:obj2.Ultrasonic}
 		            chart.series[0].addPoint(a, true, shift);
 				}
-				if(message.destinationName =="/sensor") 
+ 				if(message.destinationName =="/sensor") 
 				{	
 					const json2 = message.payloadString;
 					const obj2 = JSON.parse(json2);
@@ -60,9 +60,13 @@
  					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
 					console.log(nDate);
 					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
+					
 					var a= {x:v,y:obj2.Photoresister}
+					var a2= {x:v,y:obj2.Thermister}
 		            chart2.series[0].addPoint(a, true, shift);
-				}
+		            chart3.series[0].addPoint(a2, true, shift);
+		            
+				} 
 			}
 		
 			$(function() {
@@ -96,10 +100,10 @@
 			        }]
 			    });
 			});
-			
+			 
 			$(function() {
 			    chart2 = new Highcharts.Chart({
-			        chart2: {
+			        chart: {
 			            renderTo: 'container2',
 			            defaultSeriesType: 'spline',
 			            events: {
@@ -128,11 +132,44 @@
 			        }]
 			    });
 			});
+			
+			 $(function() {
+			    chart3 = new Highcharts.Chart({
+			        chart: {
+			            renderTo: 'container3',
+			            defaultSeriesType: 'spline',
+			            events: {
+			                load: onMessageArrived
+			            }
+			        },
+			        title: {
+			            text: 'Thermister'
+			        },
+			        xAxis: {
+			            type: 'datetime',
+			            tickPixelInterval: 100,
+			            maxZoom: 20 * 1000
+			        },
+			        yAxis: {
+			            minPadding: 0.2,
+			            maxPadding: 0.2,
+			            title: {
+			                text: 'Temp',
+			                margin: 80
+			            }
+			        },
+			        series: [{
+			            name: 'Thermister',
+			            data: []
+			        }]
+			    });
+			});  
 		</script>
 	</head>
 	<body> 
 		<div id="container" style="width:100%; height:400px;"></div>
 		<div id="container2" style="width:100%; height:400px;"></div>
+		<div id="container3" style="width:100%; height:400px;"></div>
 	</body>
 
 </html>					
