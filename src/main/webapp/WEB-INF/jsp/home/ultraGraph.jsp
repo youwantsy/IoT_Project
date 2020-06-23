@@ -28,22 +28,17 @@
 			function onConnect(){
 				console.log("mqtt broker connected")
 				client.subscribe("/ultra");
+				client.subscribe("/sensor");
 			}
 
 			function onMessageArrived(message) {					
 				if(message.destinationName =="/ultra") 
 				{	
-					
-					console.log("씨1")
 					const json2 = message.payloadString;
-					console.log("씨2")
 					const obj2 = JSON.parse(json2);
-					console.log("씨3")
 					var series = chart.series[0];
 		            var shift = series.data.length > 20;
-		           	console.log(series.data)
-		            console.log("씨4")
-		            
+		           	console.log(series.data)		            
 
  					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
 					console.log(nDate);
@@ -52,9 +47,21 @@
 		           // console.log(v);
 					var a= {x:v,y:obj2.Ultrasonic}
 		            chart.series[0].addPoint(a, true, shift);
-		            console.log("씨5")
-		            //setTimeout(onMessageArrived, 2000);
-		            console.log("씨6")
+				}
+				if(message.destinationName =="/sensor") 
+				{	
+					const json2 = message.payloadString;
+					const obj2 = JSON.parse(json2);
+					var series = chart.series[0];
+		            var shift = series.data.length > 20;
+		           	console.log(series.data)
+		            
+
+ 					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+					console.log(nDate);
+					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
+					var a= {x:v,y:obj2.Photoresister}
+		            chart2.series[0].addPoint(a, true, shift);
 				}
 			}
 		
@@ -88,13 +95,45 @@
 			            data: []
 			        }]
 			    });
-			});		
-						
+			});
+			
+			$(function() {
+			    chart2 = new Highcharts.Chart({
+			        chart2: {
+			            renderTo: 'container2',
+			            defaultSeriesType: 'spline',
+			            events: {
+			                load: onMessageArrived
+			            }
+			        },
+			        title: {
+			            text: 'Photoresister'
+			        },
+			        xAxis: {
+			            type: 'datetime',
+			            tickPixelInterval: 100,
+			            maxZoom: 20 * 1000
+			        },
+			        yAxis: {
+			            minPadding: 0.2,
+			            maxPadding: 0.2,
+			            title: {
+			                text: 'Lux',
+			                margin: 80
+			            }
+			        },
+			        series: [{
+			            name: 'LUX',
+			            data: []
+			        }]
+			    });
+			});
 		</script>
 	</head>
 	<body> 
 		<div id="container" style="width:100%; height:400px;"></div>
 		<div id="container2" style="width:100%; height:400px;"></div>
 	</body>
+
 </html>					
 					
