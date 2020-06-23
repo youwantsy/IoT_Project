@@ -1,12 +1,7 @@
 package com.mycompany.project.controller;
-
-import java.util.Calendar;
-import java.util.TimeZone;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -36,9 +31,11 @@ public class HomeController
 		return "home/distanceView";
 	}
 	@RequestMapping("/ultraGraph.do")
-	public String exam04() {
-		
+	public String ultra() {
 		return "home/ultraGraph"; 
 	}
-
+	@RequestMapping("/gasGraph.do")
+	public String gas() {
+		return "home/gasGraph"; 
+	}
 }
