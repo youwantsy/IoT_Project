@@ -373,27 +373,26 @@
 
 	<body style = "background-color: rgb(0,0,0);">
 	<div class="container-fluid">
-		<div class="row">
+		<div class="col">
 			<div>
-				<div style = "width:97%;  height:300px; outline:thick solid #000000; background-color: white; margin-left: 20px; margin-top: 50px">
+				<div style = "width:97%;  height:300px; outline:thick solid #000000;  margin-left: 20px; margin-top: 50px">
 					<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-						<figure class="highcharts-figure" style="float:right;">
+						<div ><img id=mine_img src="${pageContext.request.contextPath}/resource/img/mine.png" style="position:absolute; color:red;right:0; top:0 ;margin-top: 450px; margin-right: 100px;width: 270px;height:220px"/></div>
+						
+						<figure class="highcharts-figure" style="float:right; padding-right: 50px; padding-top: 50px">
 						    <div id="gas-detecter"  class="chart-container"></div>
 						</figure>
-					<!-- <div style = "width:30%; height:280px; padding-top: 50px;  padding-right:50px">
-						
-					 </div>-->
 				</div>
 			</div>
 		</div>
-		<div class="row">
+		<div class="col">
 			<div>
 				<div style = "width:97%; height:300px; outline:thick solid #000000;background-color: gray; margin-left: 20px;margin-top: 50px">
 					<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
 				</div>
 			</div>
 		</div>
-		<div class="row">	
+		<div class="col">	
 			<div>
 				<div style = "width:97%; height:300px; outline:thick solid #000000; background-color: gray;margin-left: 20px; margin-top: 50px;margin-bottom:20px">
 					<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
@@ -485,7 +484,7 @@
 			    series: [{
 			        name: 'Speed',
 			        data: [80],
-			        dataLabels: {
+			        dataLabels:{
 			            format:
 			                '<div style="text-align:center">' +
 			                '<span style="font-size:25px">{y}</span><br/>' +
@@ -501,9 +500,6 @@
 	
 
 			// The RPM gauge
-			
-				
-			
 			var chartRpm = Highcharts.chart('container-rpm', Highcharts.merge(gaugeOptions, {
 			    yAxis: {
 			        min: 0,
