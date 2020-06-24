@@ -57,7 +57,7 @@
 					message2 = value
 					message = new Paho.MQTT.Message(message2);
 					
-					// 명령 값에 따라 토픽 분류 + 현재 상태 출력
+					// ���� ���� ���� ���� �з� + ���� ���� ����
 					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 == "W" || message2 =="N"){
 						message.destinationName = "/order/led";
 						if(message2 == "N"){
@@ -277,7 +277,7 @@
 							    prelaserflag= false;
 						 } 
 					 }
-//////////////////////////// 카메라 서보 vertical //////////////////////////////////////////////						 
+//////////////////////////// ī�޶� ���� vertical //////////////////////////////////////////////						 
 					 if (buttonPressed(gp.buttons[12]) && ctrlflags == true){
 						 	svgo++;
 						    if(svgo > 90){
@@ -301,7 +301,7 @@
 					     client.send(message);
 					     $("#CurrentSV").attr("value", "SVGO " + message2);
 					 }
-////////////////////////////카메라 서보 horizon //////////////////////////////////////////////				 
+////////////////////////////ī�޶� ���� horizon //////////////////////////////////////////////				 
 					 if (buttonPressed(gp.buttons[14]) && ctrlflags == true){
 						 shgo++;
 						    if(shgo > 170){
@@ -397,7 +397,7 @@
 						client.send(message);
 						$("#CurrentDC").attr("value", message2)
 					 }
-//////////////////////////////// 서보모터 초기화 ///////////////////////////////////////////////////
+//////////////////////////////// �������� �ʱ�ȭ ///////////////////////////////////////////////////
 					 if (buttonPressed(gp.buttons[10]) && ctrlflags == true){
 					 		message2 = "STOP"
 					        message = new Paho.MQTT.Message("SV"+message2);
@@ -499,42 +499,80 @@
 </style>
 	</head>
 	<body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		  <a class="navbar-brand" href="#">Current Mode Status: MANUAL</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		 <!--  <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
+		  <div style="align: right">
+			<form class="form-inline my-2 my-lg-0" style="align: right">
+		      <button class="btn btn-outline-secondary my-2 my-sm-0";type="submit" style="width: 200px;">Convert to AUTO MODE</button>
+		    </form>
+		  </div>
+		</nav>
+
 		<div>
-			<img id="cameraView"/>
-			<div>			
-				<div>GAS :<input id = "Gas" value=""/></div>
-				<div>Thermister :<input id = "Thermister" value=""/></div>
-				<div>Photoresister :<input id = "Photoresister" value=""/></div>
-				<div>Ultrasonic :<input id = "Ultrasonic" value=""/></div>
-				<div>Tracking :<input id = "Tracking" value=""/></div>
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group"style="width: 500px;height:50px; margin-left: 30px; margin-top: 30px">
+					<button onclick="fun1('R')" class="btn btn-secondary">LED RED</button>
+					<button onclick="fun1('G')" class="btn btn-secondary">LED GREEN</button>
+					<button onclick="fun1('B')" class="btn btn-secondary">LED BLUE</button>
+					<button onclick="fun1('W')" class="btn btn-secondary">LED WHITE</button>
+					<button onclick="fun1('N')" class="btn btn-secondary">LED OFF</button>
+			  </div>
 			</div>
-			<div>
-				<button onclick="fun1('R')">LED_RED</button>
-				<button onclick="fun1('G')">LED_GREEN</button>
-				<button onclick="fun1('B')">LED_BLUE</button>
-				<button onclick="fun1('W')">LED_WHITE</button>
-				<button onclick="fun1('N')">LED_OFF</button>
-				<div>CurrentLed :<input id = "CurrentLed" value=""/></div>
+			
+			<div class="input-group mb-3" style="width: 500px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 250px">Current LED Status</span>
+			  </div>
+			  <input id="CurrentLed" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+			
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 500px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('ON')" class="btn btn-secondary">BUZZER ON</button>
+					<button onclick="fun1('OFF')" class="btn btn-secondary">BUZZER OFF</button>
+			  </div>
+			</div>
+			
+			<div class="input-group mb-3" style="width: 500px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 250px">Current Buzzer Status</span>
+			  </div>
+			  <input id="CurrentBuzzer" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+			
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 500px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('ENABLE')" class="btn btn-secondary" style="width: 100px">LASER_ATTACK</button>
+					<button onclick="fun1('DISABLE')" class="btn btn-secondary" style="width: 100px">LASER_RELEASED</button>
+			  </div>
 			</div>
 
-			<div>
-				<button onclick="fun1('ON')">BUZZER_ON</button>
-				<button onclick="fun1('OFF')">BUZZER_OFF</button>
-				<div>CurrentBuzzer :<input id = "CurrentBuzzer"value=""/></div>
+			<div class="input-group mb-3" style="width: 500px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 250px">Current Laser Status</span>
+			  </div>
+			  <input id="CurrentLaser" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+			
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 500px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('TURNON')" class="btn btn-secondary" style="width: 100px">LCD SCREEN ON</button>
+					<button onclick="fun1('TURNOFF')" class="btn btn-secondary" style="width: 100px">LCD SCREEN OFF</button>
+			  </div>
+			</div>
+			
+			<div class="input-group mb-3" style="width: 500px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 250px">Current LCD Status</span>
+			  </div>
+			  <input id="CurrentLcd" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 
-			<div>
-				<button onclick="fun1('ENABLE')">LASER_ON</button>
-				<button onclick="fun1('DISABLE')">LASER_OFF</button>
-				<div>CurrentLaser :<input id = "CurrentLaser" value=""/></div>
-			</div>
-
-			<div>
-				<button onclick="fun1('TURNON')">LCD_ON</button>
-				<button onclick="fun1('TURNOFF')">LCD_OFF</button>
-				<div>CurrentLcd :<input id = "CurrentLcd" value=""/></div>
-			</div>
-
+<!-- 
 			<div>
 				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
 				<button onclick="fun1('DCSTOP')">STOP</button>
@@ -565,15 +603,37 @@
 				<div>CurrentSU :<input id = "CurrentSU" value=""/></div>
 			</div>
 
-			<div>
-				<button onclick="fun1('MODEON')">CONTROL_MODE_ON</button>
-				<button onclick="fun1('MODEOFF')">CONTROL_MODE_OFF</button>
-				<div>CurrentMODE :<input id = "CurrentMODE" value=""/></div>
+ -->			
+ 			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 500px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('MODEON')" class="btn btn-secondary" style="width: 100px">MANUAL MODE ON</button>
+					<button onclick="fun1('MODEOFF')" class="btn btn-secondary" style="width: 100px">AUTO MODE ON</button>
+			  </div>
 			</div>
-			<div>
-				<button onclick="openFullscreen();">Open Video in Fullscreen Mode</button>
-				<img width="100%" id = "cameraView2"> 
-				</img>
+
+			<div class="input-group mb-3" style="width: 500px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 250px">Current Mode Status</span>
+			  </div>
+			  <input id="CurrentMODE" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+
+
+			<!-- 카메라 화면 보여줌 
+			<img id="cameraView"/>-->
+ 			
+	 		<div style="margin-left: 30px; margin-top: 20px">			
+				<div>Gas Status :<input id = "Gas" value="" style="border: none; margin-left: 5px"/></div>
+				<div>Temperature :<input id = "Thermister" value="" style="border: none;"/></div>
+				<div>Brightness :<input id = "Photoresister" value="" style="border: none;"/></div>
+				<div>Distance towards Object :<input id = "Ultrasonic" value="" style="border: none;"/></div>
+				<div>Land Mine Detecting Status:<input id = "Tracking" value="" style="border: none;"/></div>
+			</div>
+			
+			
+<!-- 			<div>
+			<button onclick="openFullscreen();">Fullscreen Mode</button>
+			<img width="100%" id = "cameraView2"> </img>
 				<script>
 				var elem = document.getElementById("cameraView2");
 				function openFullscreen() {
@@ -588,8 +648,8 @@
 				  }
 				}
 				</script>
-			</div>
+			</div>	
+ -->			
 		</div>
-		<h2 id="start">Press a button on your controller to start</h2>
 	</body>
 </html>

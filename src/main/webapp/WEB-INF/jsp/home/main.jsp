@@ -20,11 +20,7 @@
 	<body>
 		<h5 class="alert alert-info">/home/main.jsp</h5>
 		
-		<ul>
-			<li><a href="iotProject.do">iotProject.do</a><li>
-			<li><a href="ultraGraph.do">ultraGraph</a></li>	
-
-		</ul>
-
+			<div><a href="iotProject.do">Controll</a></div>
+			<div><a href="ultraGraph.do">Observe</a></div>	
 	</body>
 </html>
