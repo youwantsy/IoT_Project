@@ -24,6 +24,35 @@
 		<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 		<script src="<%=application.getContextPath()%>/resources/highcharts/code/themes/gray.js"></script>
 		
+		<script src="${pageContext.request.contextPath}/resource/js/toggle_and_hover.js"></script>
+		<!-- 택만씨가 넣은 부분 : 문제가 될 경우 빼버린다. -->
+		<style type="text/css">
+	    	.toggleBG{background: #CCCCCC; width: 70px; height: 30px; border: 1px solid #CCCCCC; border-radius: 15px;}
+	    	.toggleFG{background: #FFFFFF; width: 30px; height: 30px; border: none; border-radius: 15px; position: relative; left: 0px;}
+		</style>
+		<style>
+    .chart_container {
+    	overflow:hidden;
+        -webkit-transform:scale(1);
+        -moz-transform:scale(1);
+        -ms-transform:scale(1); 
+        -o-transform:scale(1);  
+        transform:scale(1);
+        -webkit-transition:.3s;
+        -moz-transition:.3s;
+        -ms-transition:.3s;
+        -o-transition:.3s;
+        transition:.3s;
+    }
+    .chart_container:hover{
+        -webkit-transform:scale(1.2);
+        -moz-transform:scale(1.2);
+        -ms-transform:scale(1.2);   
+        -o-transform:scale(1.2);
+        transform:scale(1.2);
+    }
+             </style>
+		<!-- 택만씨가 넣은 부분 마지막 부분: 문제가 될 경우 빼버린다. -->
 		<style>
 		.highcharts-figure .chart-container {
 			width: 300px;
@@ -78,10 +107,13 @@
 		</style>
 			</head>
 		<script>
+			
+		ggas = 0;
 			$(function(){
 				client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime().toString());
 				client.onMessageArrived = onMessageArrived;
 				client.connect({onSuccess:onConnect});
+				
 			});
 			var chart;
 			function onConnect(){
@@ -106,7 +138,8 @@
 		           // console.log(v);
 					var t = parseFloat(parseFloat(obj2.Ultrasonic).toFixed(2)) 
 					var a= {x:v,y:t}
-		            chart.series[0].addPoint(a, true, shift);
+					chart.series[0].addPoint(a, true, shift);
+		            
 				}
  				if(message.destinationName =="/sensor") 
 				{	
@@ -125,6 +158,7 @@
 					var a2= {x:v,y:t}
 		            chart2.series[0].addPoint(a, true, shift);
 		            chart3.series[0].addPoint(a2, true, shift);
+		            ggas = parseInt(obj2.Gas);
 				} 
 			}
 		
@@ -289,8 +323,8 @@
 				// The speed gauge
 				 var chartSpeed = Highcharts.chart('gas-detecter', Highcharts.merge(gaugeOptions, {
 				     yAxis: {
-				         min: 0,
-				         max: 200,
+				         min: 50,
+				         max: 150,
 				         title: {
 				             text: 'Gas'
 				         }
@@ -302,16 +336,16 @@
 
 				     series: [{
 				         name: 'Gas',
-				         data: [80],
+				         data: [0],
 				         dataLabels: {
 				             format:
 				                 '<div style="text-align:center">' +
-				                 '<span style="font-size:25px">{y}</span><br/>' +
-				                 '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+				                 '<span style="font-size:25px; color:white">{y}</span><br/>' +
+				                 '<span style="font-size:15px; color:white; opacity:0.4">wei</span>' +
 				                 '</div>'
 				         },
 				         tooltip: {
-				             valueSuffix: ' km/h'
+				             valueSuffix: 'wei'
 				         }
 				     }]
 
@@ -320,35 +354,17 @@
 				 // Bring life to the dials
 				 setInterval(function () {
 				     // Speed
-				     var point,
-				         newVal,
-				         inc;
+				     var point
 
 				     if (chartSpeed) {
 				         point = chartSpeed.series[0].points[0];
-				         inc = Math.round((Math.random() - 0.5) * 100);
-				         newVal = point.y + inc;
 
-				         if (newVal < 0 || newVal > 200) {
-				             newVal = point.y - inc;
+				         if (ggas > 0 || ggas < 100) {
+					         point.update(ggas);
 				         }
 
-				         point.update(newVal);
 				     }
-
-				     // RPM
-				     if (chartRpm) {
-				         point = chartRpm.series[0].points[0];
-				         inc = Math.random() - 0.5;
-				         newVal = point.y + inc;
-
-				         if (newVal < 0 || newVal > 5) {
-				             newVal = point.y - inc;
-				         }
-
-				         point.update(newVal);
-				     }
-				 }, 2000);
+				 }, 1000);
 
 				 
 			 });
@@ -359,26 +375,27 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div>
-				<div style = "width:97%;  height:300px; outline:thick solid #000000; background-color: gray; margin-left: 20px;margin-top: 50px">
-					<div id="container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-					<div style = "width:30%; float:right; height:280px; outlint: thick solid #000000; background-color: gray;"></div>
-					<figure class="highcharts-figure">
-					    <div id="gas-detecter" class="chart-container"></div>
-					</figure>
+				<div style = "width:97%;  height:300px; outline:thick solid #000000; background-color: white; margin-left: 20px;margin-top: 50px">
+					<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					<div style = "width:30%; height:280px; padding-top: 50px; align-items: ;">
+						<figure class="highcharts-figure">
+						    <div id="gas-detecter" class="chart-container"></div>
+						</figure>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row">
 			<div>
 				<div style = "width:97%; height:300px; outline:thick solid #000000;background-color: gray; margin-left: 20px;margin-top: 50px">
-					<div id="container2" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
 				</div>
 			</div>
 		</div>
 		<div class="row">	
 			<div>
 				<div style = "width:97%; height:300px; outline:thick solid #000000; background-color: gray;margin-left: 20px; margin-top: 50px;margin-bottom:20px">
-					<div id="container3" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
 				</div>
 			</div>
 		</div>
