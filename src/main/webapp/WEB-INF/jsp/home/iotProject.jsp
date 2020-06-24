@@ -573,25 +573,26 @@
 			</div>
 		</div>
 
-		<div>
-			<div style="width: 470px; height:75px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; align-content: center;">
-			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px;">
-					<button onclick="fun1('TURNON')" class="btn btn-secondary" style="width: 200px">LCD SCREEN ON</button>
-					<button onclick="fun1('TURNOFF')" class="btn btn-secondary" style="width: 200px">LCD SCREEN OFF</button>
-			  </div>
+		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; ">
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+				<div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('TURNON')" class="btn btn-secondary"style="width: 200px">LCD SCREEN ON</button>
+					<button onclick="fun1('TURNOFF')" class="btn btn-secondary"style="width: 200px">LCD SCREEN OFF</button>
+				</div>
 			</div>
 
-			<div style="width: 470px; height:75px; margin-left: 20px; background-color:gainsboro; opacity: 0.9;align-content: center; "class="input-group mb-3">
-			  <div class="input-group-prepend">
-			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current LCD Status</span>
-			  </div>
-			  <input id="CurrentLcd" value= "" type="text" class="form-control" style="width: 200px;" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
+				<div class="input-group-prepend">
+					<span class="input-group-text" id="inputGroup-sizing-default"style="width: 200px">Current LCD Status</span>
+				</div>
+				<input id="CurrentLcd" value="" type="text" class="form-control"style="width: 200px;" aria-label="Sizing example input"aria-describedby="inputGroup-sizing-default">
 			</div>
-			
-			<img id=image_canv src="${pageContext.request.contextPath}/resource/img/tank.png" style="position:fixed; right:0; top:0 ;margin-top: 350px; margin-right: 30px"/>
 		</div>
 
-		<div style="width: 470px; height:350px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
+		<img id=image_canv src="${pageContext.request.contextPath}/resource/img/tank.png" style="position:absolute; right:0; top:0 ;margin-top: 450px; margin-right: 100px;width: 250px;height:500px"/>
+			
+
+		<div style="width: 470px; height:350px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center;position:absolute;right:10px;top:35px;">
 			<div>
 				CurrentSpeed(12~80) :<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())"/>
 				<button onclick="fun1('DCSTOP')">STOP</button>
@@ -600,7 +601,7 @@
 	
 			<div>
 				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max ="130" value="50" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
-				<button onclick="fun1('SWSTOP')">STOP</button>
+				<button onclick="fun1('SWSTOP');funstop()">STOP</button>
 				<div>CurrentSW :<input id = "CurrentSW" value=""/></div>
 			</div>
 	
@@ -627,19 +628,19 @@
 		<script>
 			var value= 0;
 			var value2= 0;
-
+			function funstop(){
+			      let value= 0;
+			      $("#image_canv").rotate({animateTo:value})
+			}
 			function funrotate(){
 			      value= ($(wheelselects).val()-90);
 			      $("#image_canv").rotate({animateTo:value})
 			}
 			
 			$("#wheelselects").on('mousewheel',funrotate);
-			$("#wheelselects").on('change',funrotate);		
-			
+			$("#wheelselects").on('change',funrotate);
 		</script>
-		
-		
-		
+
  		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
  			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
 			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">

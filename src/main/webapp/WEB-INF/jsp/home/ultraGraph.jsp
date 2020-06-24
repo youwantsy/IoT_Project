@@ -375,13 +375,14 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div>
-				<div style = "width:97%;  height:300px; outline:thick solid #000000; background-color: white; margin-left: 20px;margin-top: 50px">
+				<div style = "width:97%;  height:300px; outline:thick solid #000000; background-color: white; margin-left: 20px; margin-top: 50px">
 					<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-					<div style = "width:30%; height:280px; padding-top: 50px; align-items: ;">
-						<figure class="highcharts-figure">
-						    <div id="gas-detecter" class="chart-container"></div>
+						<figure class="highcharts-figure" style="float:right;">
+						    <div id="gas-detecter"  class="chart-container"></div>
 						</figure>
-					</div>
+					<!-- <div style = "width:30%; height:280px; padding-top: 50px;  padding-right:50px">
+						
+					 </div>-->
 				</div>
 			</div>
 		</div>
