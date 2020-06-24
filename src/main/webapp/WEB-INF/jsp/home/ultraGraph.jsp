@@ -25,33 +25,34 @@
 		<script src="<%=application.getContextPath()%>/resources/highcharts/code/themes/gray.js"></script>
 		
 		<script src="${pageContext.request.contextPath}/resource/js/toggle_and_hover.js"></script>
+		
 		<!-- 택만씨가 넣은 부분 : 문제가 될 경우 빼버린다. -->
 		<style type="text/css">
 	    	.toggleBG{background: #CCCCCC; width: 70px; height: 30px; border: 1px solid #CCCCCC; border-radius: 15px;}
 	    	.toggleFG{background: #FFFFFF; width: 30px; height: 30px; border: none; border-radius: 15px; position: relative; left: 0px;}
 		</style>
 		<style>
-    .chart_container {
-    	overflow:hidden;
-        -webkit-transform:scale(1);
-        -moz-transform:scale(1);
-        -ms-transform:scale(1); 
-        -o-transform:scale(1);  
-        transform:scale(1);
-        -webkit-transition:.3s;
-        -moz-transition:.3s;
-        -ms-transition:.3s;
-        -o-transition:.3s;
-        transition:.3s;
-    }
-    .chart_container:hover{
-        -webkit-transform:scale(1.2);
-        -moz-transform:scale(1.2);
-        -ms-transform:scale(1.2);   
-        -o-transform:scale(1.2);
-        transform:scale(1.2);
-    }
-             </style>
+		    .chart_container {
+		    	overflow:hidden;
+		        -webkit-transform:scale(1);
+		        -moz-transform:scale(1);
+		        -ms-transform:scale(1); 
+		        -o-transform:scale(1);  
+		        transform:scale(1);
+		        -webkit-transition:.3s;
+		        -moz-transition:.3s;
+		        -ms-transition:.3s;
+		        -o-transition:.3s;
+		        transition:.3s;
+		    }
+		    .chart_container:hover{
+		        -webkit-transform:scale(1.2);
+		        -moz-transform:scale(1.2);
+		        -ms-transform:scale(1.2);   
+		        -o-transform:scale(1.2);
+		        transform:scale(1.2);
+		    }
+        </style>
 		<!-- 택만씨가 넣은 부분 마지막 부분: 문제가 될 경우 빼버린다. -->
 		<style>
 		.highcharts-figure .chart-container {
@@ -105,7 +106,7 @@
 		
 		}
 		</style>
-			</head>
+	</head>
 		<script>
 			
 		ggas = 0;
@@ -139,6 +140,14 @@
 					var t = parseFloat(parseFloat(obj2.Ultrasonic).toFixed(2)) 
 					var a= {x:v,y:t}
 					chart.series[0].addPoint(a, true, shift);
+					
+					if (t <= 7){
+		            	$("#attack_img").attr("src", "${pageContext.request.contextPath}/resource/img/attack.jpg")
+		            }
+		            else if (t > 7){
+		            	$("#attack_img").attr("src", "${pageContext.request.contextPath}/resource/img/normal.jpg")
+		            }
+					
 		            
 				}
  				if(message.destinationName =="/sensor") 
@@ -150,20 +159,35 @@
 		           	console.log(series.data)
 		            
 
- 					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+ 					const nDate = new Date();
 					console.log(nDate);
 					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
+					
 					var t = parseFloat(parseFloat(obj2.Thermister).toFixed(2)) 
+					var vision = parseFloat(parseFloat(obj2.Photoresister))
 					var a= {x:v,y:obj2.Photoresister}
 					var a2= {x:v,y:t}
 		            chart2.series[0].addPoint(a, true, shift);
 		            chart3.series[0].addPoint(a2, true, shift);
 		            ggas = parseInt(obj2.Gas);
+		            
 		            if(obj2.Tracking == "1"){
 		            	$("#mine_img").attr("src", "${pageContext.request.contextPath}/resource/img/mine2.png")
 		            }
 		            else if(obj2.Tracking =="0"){
 		            	$("#mine_img").attr("src", "${pageContext.request.contextPath}/resource/img/mine.png")
+		            }
+		            if(t >= 30){
+		            	$("#heat_img").attr("src", "${pageContext.request.contextPath}/resource/img/overheat.png")
+		            }
+		            else if(t < 30){
+	            		$("#heat_img").attr("src", "${pageContext.request.contextPath}/resource/img/overheat2.png")
+	            	}
+		            if (vision < 120){
+		            	$("#night_img").attr("src", "${pageContext.request.contextPath}/resource/img/daytime.jpg")
+		            }
+		            else if (vision >= 120){
+		            	$("#night_img").attr("src", "${pageContext.request.contextPath}/resource/img/night.jpg")
 		            }
 				} 
 			}
@@ -374,200 +398,44 @@
 
 				 
 			 });
-
 		</script>
-
-	<body style = "background-color: rgb(0,0,0);">
-	<div class="container-fluid">
-		<div class="col">
-			<div>
-				<div style = "width:97%;  height:300px; outline:thick solid #000000;  margin-left: 20px; margin-top: 50px">
-					<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-						<div ><img id=mine_img class="chart_container"; style="position:absolute; color:red;right:0; top:0 ;margin-top: 450px; margin-right: 100px;width: 270px;height:220px"/></div>
-						
+		
+		
+	<body>
+		
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		  <a class="navbar-brand" href="#" style="margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;AUTO</a>
+		</nav>
+		<div></div>
+		<div class="container-fluid" style="background-color: black;">
+			<div class="col">
+				<div>
+					<div style = "width:97%;  height:300px; margin-left: 20px; margin-top: 50px">
+						<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
 						<figure class="highcharts-figure" style="float:right; padding-right: 50px; padding-top: 50px">
 						    <div id="gas-detecter"  class="chart-container"></div>
 						</figure>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col">
-			<div>
-				<div style = "width:97%; height:300px; outline:thick solid #000000;background-color: gray; margin-left: 20px;margin-top: 50px">
-					<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
+			<div class="col">
+				<div>
+					<div style = "width:97%; height:300px; margin-left: 20px;margin-top: 50px">
+						<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col">
-			<div>
-				<div style = "width:97%; height:300px; outline:thick solid #000000; background-color: gray;margin-left: 20px; margin-top: 50px;margin-bottom:20px">
-					<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
+			<div class="col">
+				<div>
+					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px;margin-bottom:20px">
+						<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					</div>
 				</div>
 			</div>
+			<div><img id=attack_img style="position:absolute; color:red;right:0; top:0 ;margin-top: 140px; margin-right: 800px;width: 500px;height:280px"/></div>
+			<div><img id=mine_img  style="position:absolute; color:red;right:0; top:0 ;margin-top: 490px; margin-right: 100px;width: 270px;height:220px"/></div>
+			<div><img id=heat_img  style="position:absolute; color:red;right:0; top:0;margin-top: 830px; margin-right: 100px;width: 220px;height:220px"/></div>
+			<div><img id=night_img style="position:absolute; color:red;right:0; top:0;margin-top: 490px; margin-right: 800px;width: 500px;height:280px"/></div>
 		</div>
-	</div>
-		
-	<!-- <script>
-////////////////////////////////////////////////////GAS //////////////////////////////////////////63636363
-	
-	 var gaugeOptions = {
-			    chart: {
-			        type: 'solidgauge'
-			    },
-
-			    title: null,
-
-			    pane: {
-			        center: ['50%', '85%'],
-			        size: '140%',
-			        startAngle: -90,
-			        endAngle: 90,
-			        background: {
-			            backgroundColor:
-			                Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-			            innerRadius: '60%',
-			            outerRadius: '100%',
-			            shape: 'arc'
-			        }
-			    },
-
-			    exporting: {
-			        enabled: false
-			    },
-
-			    tooltip: {
-			        enabled: false
-			    },
-
-			    // the value axis
-			    yAxis: {
-			        stops: [
-			            [0.1, '#55BF3B'], // green
-			            [0.5, '#DDDF0D'], // yellow
-			            [0.9, '#DF5353'] // red
-			        ],
-			        lineWidth: 0,
-			        tickWidth: 0,
-			        minorTickInterval: null,
-			        tickAmount: 2,
-			        title: {
-			            y: -70
-			        },
-			        labels: {
-			            y: 16
-			        }
-			    },
-
-			    plotOptions: {
-			        solidgauge: {
-			            dataLabels: {
-			                y: 5,
-			                borderWidth: 0,
-			                useHTML: true
-			            }
-			        }
-			    }
-			};
-	
-	 
-		 
-	 
-
-			// The speed gauge
-			var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
-			    yAxis: {
-			        min: 0,
-			        max: 200,
-			        title: {
-			            text: 'Speed'
-			        }
-			    },
-
-			    credits: {
-			        enabled: false
-			    },
-
-			    series: [{
-			        name: 'Speed',
-			        data: [80],
-			        dataLabels:{
-			            format:
-			                '<div style="text-align:center">' +
-			                '<span style="font-size:25px">{y}</span><br/>' +
-			                '<span style="font-size:12px;opacity:0.4">km/h</span>' +
-			                '</div>'
-			        },
-			        tooltip: {
-			            valueSuffix: ' km/h'
-			        }
-			    }]
-
-			}));
-	
-
-			// The RPM gauge
-			var chartRpm = Highcharts.chart('container-rpm', Highcharts.merge(gaugeOptions, {
-			    yAxis: {
-			        min: 0,
-			        max: 5,
-			        title: {
-			            text: 'RPM'
-			        }
-			    },
-
-			    series: [{
-			        name: 'RPM',
-			        data: [1],
-			        dataLabels: {
-			            format:
-			                '<div style="text-align:center">' +
-			                '<span style="font-size:25px">{y:.1f}</span><br/>' +
-			                '<span style="font-size:12px;opacity:0.4">' +
-			                '* 1000 / min' +
-			                '</span>' +
-			                '</div>'
-			        },
-			        tooltip: {
-			            valueSuffix: ' revolutions/min'
-			        }
-			    }]
-
-			}));
-
-			// Bring life to the dials
-			setInterval(function () {
-			    // Speed
-			    var point,
-			        newVal,
-			        inc;
-
-			    if (chartSpeed) {
-			        point = chartSpeed.series[0].points[0];
-			        inc = Math.round((Math.random() - 0.5) * 100);
-			        newVal = point.y + inc;
-
-			        if (newVal < 0 || newVal > 200) {
-			            newVal = point.y - inc;
-			        }
-
-			        point.update(newVal);
-			    }
-
-			    // RPM
-			    if (chartRpm) {
-			        point = chartRpm.series[0].points[0];
-			        inc = Math.random() - 0.5;
-			        newVal = point.y + inc;
-
-			        if (newVal < 0 || newVal > 5) {
-			            newVal = point.y - inc;
-			        }
-
-			        point.update(newVal);
-			    }
-			}, 2000);
-	</script> -->
 	</body>
-
-</html>					
-					
+</html>			

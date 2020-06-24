@@ -80,7 +80,10 @@
 
 					if (message2 == "MODEON" || message2 == "MODEOFF"){
 						message.destinationName = "/order/mode";
-						$("#CurrentMODE").attr("value", "CONTROL " + message2)
+						if(message2 == "MODEON")
+							$("#CurrentMODE").attr("value", "MANUAL MODE ON")
+						else
+							$("#CurrentMODE").attr("value", "AUTO MODE ON")
 					}
 
 					if (message2 == "TURNON" || message2 == "TURNOFF"){
@@ -172,7 +175,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								$("#CurrentMODE").attr("value", "CONTROL" + message2)
+								$("#CurrentMODE").attr("value", "AUTO MODE ON")
 								count = 0;
 							}
 						 }
@@ -185,7 +188,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								$("#CurrentMODE").attr("value", "CONTROL" + message2)
+								$("#CurrentMODE").attr("value", "MANUAL MODE ON")
 								count = 0;
 							 }
 						 }
@@ -525,92 +528,79 @@
 					}
 				</style>
 	</head>
-
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand" href="#" style="margin-left: 20px">Current Mode Status:   MANUAL</a>
-		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-		    <span class="navbar-toggler-icon"></span>
-		  </button>
-
-		 <!--  <div class="collapse navbar-collapse" id="navbarSupportedContent"> -->
-<!-- 		  <div style="align: right">
-			<form class="form-inline my-2 my-lg-0" style="align: right">
-		      <button class="btn btn-outline-secondary my-2 my-sm-0";type="submit" style="width: 200px;">Convert to AUTO MODE</button>
-		    </form>
-		  </div> -->
+		  <a class="navbar-brand" href="#" style="margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;MANUAL</a>
 		</nav>
 
+		<div id="hiyo" style="background-repeat : no-repeat; background-size : cover;">
+		
+		<div style="width: 470px; height:170px; margin-left: 20px; background-color:gainsboro; opacity: 0.9;">
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group"style="width: 400px;height:50px;margin-left: 30px; margin-top: 30px">
+					<button onclick="fun1('R')" class="btn btn-secondary">RED</button>
+					<button onclick="fun1('G')" class="btn btn-secondary">GREEN</button>
+					<button onclick="fun1('B')" class="btn btn-secondary">BLUE</button>
+					<button onclick="fun1('W')" class="btn btn-secondary">WHITE</button>
+					<button onclick="fun1('N')" class="btn btn-secondary">OFF</button>
+			  </div>
+			</div>
 
-			<div id="hiyo" style="background-repeat : no-repeat; background-size : cover;">
+			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current LED Status</span>
+			  </div>
+			  <input id="CurrentLed" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+		</div>
+
+		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('ON')" class="btn btn-secondary">BUZZER ON</button>
+					<button onclick="fun1('OFF')" class="btn btn-secondary">BUZZER OFF</button>
+			  </div>
+			</div>
 			
-			<div style="width: 470px; height:170px; margin-left: 20px; background-color:gainsboro; opacity: 0.9;">
-				<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-				  <div class="btn-group mr-2" role="group" aria-label="First group"style="width: 400px;height:50px;margin-left: 30px; margin-top: 30px">
-						<button onclick="fun1('R')" class="btn btn-secondary">RED</button>
-						<button onclick="fun1('G')" class="btn btn-secondary">GREEN</button>
-						<button onclick="fun1('B')" class="btn btn-secondary">BLUE</button>
-						<button onclick="fun1('W')" class="btn btn-secondary">WHITE</button>
-						<button onclick="fun1('N')" class="btn btn-secondary">OFF</button>
-				  </div>
-				</div>
-	
-				<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current LED Status</span>
-				  </div>
-				  <input id="CurrentLed" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				</div>
+			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Buzzer Status</span>
+			  </div>
+			  <input id="CurrentBuzzer" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+		</div>
+
+		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('ENABLE')" class="btn btn-secondary" style="width: 200px">LASER ATTACK</button>
+					<button onclick="fun1('DISABLE')" class="btn btn-secondary" style="width: 200px">LASER RELEASED</button>
+			  </div>
 			</div>
 
-			<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
-				<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-				  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
-						<button onclick="fun1('ON')" class="btn btn-secondary">BUZZER ON</button>
-						<button onclick="fun1('OFF')" class="btn btn-secondary">BUZZER OFF</button>
-				  </div>
-				</div>
-				
-				<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Buzzer Status</span>
-				  </div>
-				  <input id="CurrentBuzzer" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				</div>
+			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Laser Status</span>
+			  </div>
+			  <input id="CurrentLaser" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			</div>
+		</div>
+
+		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
+			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
+			  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
+					<button onclick="fun1('TURNON')" class="btn btn-secondary" style="width: 200px">LCD SCREEN ON</button>
+					<button onclick="fun1('TURNOFF')" class="btn btn-secondary" style="width: 200px">LCD SCREEN OFF</button>
+			  </div>
 			</div>
 
-			<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
-				<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-				  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
-						<button onclick="fun1('ENABLE')" class="btn btn-secondary" style="width: 200px">LASER ATTACK</button>
-						<button onclick="fun1('DISABLE')" class="btn btn-secondary" style="width: 200px">LASER RELEASED</button>
-				  </div>
-				</div>
-	
-				<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Laser Status</span>
-				  </div>
-				  <input id="CurrentLaser" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				</div>
+			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
+			  <div class="input-group-prepend">
+			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px;">Current LCD Status</span>
+			  </div>
+			  <input id="CurrentLcd" value= "" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
-
-			<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
-				<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-				  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
-						<button onclick="fun1('TURNON')" class="btn btn-secondary" style="width: 200px">LCD SCREEN ON</button>
-						<button onclick="fun1('TURNOFF')" class="btn btn-secondary" style="width: 200px">LCD SCREEN OFF</button>
-				  </div>
-				</div>
-	
-				<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
-				  <div class="input-group-prepend">
-				    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px; margin-left: 20px">Current LCD Status</span>
-				  </div>
-				  <input id="CurrentLcd" value= "" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				</div>
-			</div>
-					
+		</div>			
 
  		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
  			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
@@ -630,74 +620,47 @@
 		
 		<img id=image_canv src="${pageContext.request.contextPath}/resource/img/tank.png" style="position:fixed; right:0; top:0 ;margin-top: 350px; margin-right: 30px"/>
 		
-		<div style="width: 600px; height:180px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; position: absolute; right:0; top:0; margin-right: 30px; margin-top: 55px" >
+		<div style="width: 580px; height:250px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; position: absolute; right:0; top:0; margin-right: 30px; margin-top: 55px" >
 			<div class="input-group">
 				  <div class="input-group-prepend">
-				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px">Current Speed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12 ~ 80</span>
+				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-top: 10px; margin-left: 10px; margin-bottom: 10px">Current Speed &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12 ~ 80</span>
 				  </div>
-				   		<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				  		<button onclick="fun1('DCSTOP');stopbuttondc()" class="btn btn-secondary" style="width: 200px">DC Motor STOP</button>
+				   		<input id= "countselects" type="number" name="countselect" min="12" max = "80" value="12" style="margin-top: 10px" onmousewheel="fun1('DCGO'+$(countselects).val())" onchange="fun1('DCGO'+$(countselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+				  		<button onclick="fun1('DCSTOP');stopbuttondc()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-top: 10px; margin-bottom: 10px; margin-right: 10px">DC Motor STOP</button>
 			</div>
 			
 			<div class="input-group">
 				  <div class="input-group-prepend">
-				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px">Camera - Vertical &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5 ~ 90</span>
+				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-left: 10px; margin-bottom: 10px">Camera - Vertical &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5 ~ 90</span>
 				  </div>
 				  		<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				  		<button onclick="fun1('SVSTOP');stopbuttonsv()" class="btn btn-secondary" style="width: 200px">Default Angle</button>
+				  		<button onclick="fun1('SVSTOP');stopbuttonsv()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-bottom: 10px; margin-right: 10px">Default Angle</button>
 			</div>
 			
 			<div class="input-group">
 				  <div class="input-group-prepend">
-				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px">Camera - Horizontal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12 ~ 170</span>
+				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-left: 10px; margin-bottom: 10px">Camera - Horizontal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12 ~ 170</span>
 				  </div>
 				  		<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" value="90" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				  		<button onclick="fun1('SHSTOP');stopbuttonsh()" class="btn btn-secondary" style="width: 200px">Default Angle</button>
+				  		<button onclick="fun1('SHSTOP');stopbuttonsh()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-bottom: 10px; margin-right: 10px">Default Angle</button>
 			</div>
 			
 			<div class="input-group">
 				  <div class="input-group-prepend">
-				    	<div class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; float: left;">Ultrasonic Servo</div>  <div style="float: right; margin-left: -75px; line-height: 35px; text-align: left; width: 75px;">40 ~ 120</div>
+				    	<div class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-left:10px; margin-bottom: 10px;float: left;">Ultrasonic Servo</div>  <div style="float: right; margin-left: -75px; line-height: 35px; text-align: left; width: 75px;">40 ~ 120</div>
 				  </div>
 				  		<input id= "ultraselects" type="number" name="ultraselects" min="40" max ="120" value="90" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				  		<button onclick="fun1('SUSTOP');stopbuttonsu()" class="btn btn-secondary" style="width: 200px">Default Angle</button>
+				  		<button onclick="fun1('SUSTOP');stopbuttonsu()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-bottom: 10px; margin-right: 10px">Default Angle</button>
 			</div>
 
 			<div class="input-group">
 				  <div class="input-group-prepend">
-				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px">Wheel Servo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50 ~ 130</span>
+				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-left: 10px; margin-bottom: 10px">Wheel Servo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50 ~ 130</span>
 				  </div>
 				  		<input id= "wheelselects" type="number" name="wheelselects" min="50" max ="130" value="90" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
-				  		<button id= "wheelstop" onclick="fun1('SWSTOP');stopbuttonsw()" class="btn btn-secondary" style="width: 200px">Default Angle</button>
+				  		<button id= "wheelstop" onclick="fun1('SWSTOP');stopbuttonsw()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-bottom: 10px; margin-right: 10px">Default Angle</button>
 			</div>
 		</div>
-
-
-<!-- 
-			<div>
-				Servo_Wheel(50~130) :<input id= "wheelselects" type="number" name="wheelselects" min="50" max ="130" value="50" onmousewheel="fun1('SWGO'+$(wheelselects).val())" onchange="fun1('SWGO'+$(wheelselects).val())"/>
-				<button onclick="fun1('SWSTOP')">STOP</button>
-				<div>CurrentSW :<input id = "CurrentSW" value=""/></div>
-			</div>
-	
-			<div>
-				Servo_vertical(5~90) :<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())"/>
-				<button onclick="fun1('SVSTOP')">STOP</button>
-				<div>CurrentSV :<input id = "CurrentSV" value=""/></div>
-			</div>
-	
-			<div>
-				Servo_horizontal(12~170) :<input id= "horizontalselects" type="number" name="horizontalselects" min="12" max = "170" value="12" onmousewheel="fun1('SHGO'+$(horizontalselects).val())" onchange="fun1('SHGO'+$(horizontalselects).val())" />
-				<button onclick="fun1('SHSTOP')">STOP</button>
-				<div>CurrentSH :<input id = "CurrentSH" value=""/></div>
-			</div>
-	
-			<div>
-				Servo_Ultra(40~120) :<input id= "ultraselects" type="number" name="ultraselects" min="40" max ="120" value="40" onmousewheel="fun1('SUGO'+$(ultraselects).val())" onchange="fun1('SUGO'+$(ultraselects).val())"/>
-				<button onclick="fun1('SUSTOP')">STOP</button>
-				<div>CurrentSU :<input id = "CurrentSU" value=""/></div>
-			</div>
--->	
 
 		<!-- 탱그 미니어쳐 조작을 위한 js -->
 		<script>
