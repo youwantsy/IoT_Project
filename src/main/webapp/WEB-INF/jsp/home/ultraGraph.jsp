@@ -159,6 +159,12 @@
 		            chart2.series[0].addPoint(a, true, shift);
 		            chart3.series[0].addPoint(a2, true, shift);
 		            ggas = parseInt(obj2.Gas);
+		            if(obj2.Tracking == "1"){
+		            	$("#mine_img").attr("src", "${pageContext.request.contextPath}/resource/img/mine2.png")
+		            }
+		            else if(obj2.Tracking =="0"){
+		            	$("#mine_img").attr("src", "${pageContext.request.contextPath}/resource/img/mine.png")
+		            }
 				} 
 			}
 		
@@ -324,7 +330,7 @@
 				 var chartSpeed = Highcharts.chart('gas-detecter', Highcharts.merge(gaugeOptions, {
 				     yAxis: {
 				         min: 50,
-				         max: 150,
+				         max: 90,
 				         title: {
 				             text: 'Gas'
 				         }
@@ -377,7 +383,7 @@
 			<div>
 				<div style = "width:97%;  height:300px; outline:thick solid #000000;  margin-left: 20px; margin-top: 50px">
 					<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-						<div ><img id=mine_img src="${pageContext.request.contextPath}/resource/img/mine.png" style="position:absolute; color:red;right:0; top:0 ;margin-top: 450px; margin-right: 100px;width: 270px;height:220px"/></div>
+						<div ><img id=mine_img class="chart_container"; style="position:absolute; color:red;right:0; top:0 ;margin-top: 450px; margin-right: 100px;width: 270px;height:220px"/></div>
 						
 						<figure class="highcharts-figure" style="float:right; padding-right: 50px; padding-top: 50px">
 						    <div id="gas-detecter"  class="chart-container"></div>
@@ -392,7 +398,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="col">	
+		<div class="col">
 			<div>
 				<div style = "width:97%; height:300px; outline:thick solid #000000; background-color: gray;margin-left: 20px; margin-top: 50px;margin-bottom:20px">
 					<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
