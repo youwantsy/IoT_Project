@@ -7,7 +7,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Insert title here</title>
+		<title>Manual Control Mode</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
 		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
@@ -713,12 +713,12 @@
 			$("#wheelselects").on('change',function(event){ funrotate(0)});
 		</script>
 
- 		<div style="margin-left: 1200px; font-size: 15px; font-weight:bold">
+ 		<div style="margin-left: 1100px; font-size: 15px; font-weight:bold">
 			<div>Distance towards Object (cm) :<input id = "Ultrasonic" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
 			<div>Temperature (celsius) :<input id = "Thermister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
-			<div>Land Mine Detecting Status:<input id = "Tracking" value="" style="border: none; margin-left: 10px; background-color: transparent; font-weight:bold"/></div>
+			<div>Land Mine Detecting Status:<input id = "Tracking" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
 			<div>Brightness (lux) :<input id = "Photoresister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
-			<div>Gas Status (pm) :<input id = "Gas" value="" style="border: none;margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
+			<div>Gas Status (pm) :<input id = "Gas" value="" style="border: none;margin-left: 10px; background-color: transparent; font-weight:bold"/></div>
 		</div>
 		
 		</div>
