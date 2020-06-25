@@ -152,7 +152,7 @@
 					return b == 1.0;
 				}
 					var count = 0
-					var svgo = 12
+					var svgo = 20
 					var shgo = 90
 					var swgo = 90
 					var sugo = 80
@@ -178,7 +178,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								$("#CurrentMODE").attr("value", "AUTO MODE ON")
+								let ret = window.open("http://localhost:8080/project/home/AutoControl.do", "_self");
 								count = 0;
 							}
 						 }
@@ -191,7 +191,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								$("#CurrentMODE").attr("value", "MANUAL MODE ON")
+								let ret = window.open("http://localhost:8080/project/home/ManualControl.do", "_self");
 								count = 0;
 							 }
 						 }
@@ -438,7 +438,7 @@
 						    $("#wheelselects").val(90)
 						    $("#horizontalselects").val(90)
 						    $("#ultraselects").val(90)
-						    $("#verticalselects").val(5)
+						    $("#verticalselects").val(20)
 						    $("#countselects").val(12)
 					 }
 //////////////////////////// WHEEL SERVO ///////////////////////////////////////////
@@ -534,7 +534,7 @@
 	<body>
 	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;MANUAL</a>
+		  <a class="navbar-brand" style="font-weight: bold; margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;MANUAL</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -546,8 +546,8 @@
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0">
-		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-		    	<a class="navbar-brand" href="AutoControl.do">Convert to Auto Sensing Mode</a>
+		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do" style="font-weight: bold;">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		    	<a class="navbar-brand" href="AutoControl.do" style="font-weight: bold" >Convert to Auto Sensing Mode</a>
 		    </form>
 		  </div>
 		</nav>
@@ -652,7 +652,7 @@
 				  <div class="input-group-prepend">
 				    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 300px; margin-left: 10px; margin-bottom: 10px">Camera - Vertical &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5 ~ 90</span>
 				  </div>
-				  		<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="5" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+				  		<input id= "verticalselects" type="number" name="verticalselects" min="5" max = "90" value="20" onmousewheel="fun1('SVGO'+$(verticalselects).val())" onchange="fun1('SVGO'+$(verticalselects).val())" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 				  		<button onclick="fun1('SVSTOP');stopbuttonsv()" class="btn btn-secondary" style="width: 170px; margin-left: 10px; margin-bottom: 10px; margin-right: 10px">Default Angle</button>
 			</div>
 			
@@ -693,7 +693,7 @@
 			}function stopbuttondc(){
 				$('#countselects').val(12)	
 			}function stopbuttonsv(){
-				$('#verticalselects').val(5)	
+				$('#verticalselects').val(20)	
 			}function stopbuttonsh(){
 				$('#horizontalselects').val(90)	
 			}
@@ -713,12 +713,12 @@
 			$("#wheelselects").on('change',function(event){ funrotate(0)});
 		</script>
 
- 		<div style="margin-left: 1200px;">
-			<div>Gas Status :<input id = "Gas" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent;"/></div>
-			<div>Temperature :<input id = "Thermister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent;"/></div>
-			<div>Brightness :<input id = "Photoresister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent;"/></div>
-			<div>Distance towards Object :<input id = "Ultrasonic" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent;"/></div>
-			<div>Land Mine Detecting Status:<input id = "Tracking" value="" style="border: none; margin-left: 10px; background-color: transparent;"/></div>
+ 		<div style="margin-left: 1200px; font-size: 15px; font-weight:bold">
+			<div>Distance towards Object (cm) :<input id = "Ultrasonic" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
+			<div>Temperature (celsius) :<input id = "Thermister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
+			<div>Land Mine Detecting Status:<input id = "Tracking" value="" style="border: none; margin-left: 10px; background-color: transparent; font-weight:bold"/></div>
+			<div>Brightness (lux) :<input id = "Photoresister" value="" style="border: none; margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
+			<div>Gas Status (pm) :<input id = "Gas" value="" style="border: none;margin-left: 10px; margin-bottom: 5px; background-color: transparent; font-weight:bold"/></div>
 		</div>
 		
 		</div>

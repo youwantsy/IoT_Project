@@ -4,7 +4,6 @@
 <html>
 	<head>
 		<meta charset="UTF-8">
-		<title>highcharts</title>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
 		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
@@ -120,6 +119,7 @@
 			function onConnect(){
 				console.log("mqtt broker connected")
 				client.subscribe("/ultra");
+				client.subscribe("/camerapub");
 				client.subscribe("/sensor");
 				
 				message = new Paho.MQTT.Message('MODEOFF');
@@ -128,8 +128,7 @@
 			}
 
 			function onMessageArrived(message) {					
-				if(message.destinationName =="/ultra") 
-				{	
+				if(message.destinationName =="/ultra"){	
 					const json2 = message.payloadString;
 					const obj2 = JSON.parse(json2);
 					var series = chart.series[0];
@@ -138,9 +137,7 @@
 
  					const nDate = new Date();
 					console.log(nDate);
-					//var v = nDate.getSeconds();
 					var v = nDate.getTime()+32400000;
-		           // console.log(v);
 					var t = parseFloat(parseFloat(obj2.Ultrasonic).toFixed(2)) 
 					var a= {x:v,y:t}
 					chart.series[0].addPoint(a, true, shift);
@@ -152,6 +149,10 @@
 		            	$("#attack_img").attr("src", "${pageContext.request.contextPath}/resource/img/normal.jpg")
 		            }
 				}
+				if(message.destinationName =="/camerapub"){
+					$("#cameraView").attr("src", "data:image/jpg;base64,"+ message.payloadString);
+				}
+				
  				if(message.destinationName =="/sensor") {	
 					const json2 = message.payloadString;
 					const obj2 = JSON.parse(json2);
@@ -390,10 +391,76 @@
 				     }
 				 }, 1000);
 			 });
+/////////////////////////////////////////////////   GAMEPAD   //////////////////////////////////////////////////////
+			var start;
+			window.addEventListener("gamepadconnected", function(e) {
+				var gp = navigator.getGamepads()[e.gamepad.index];
+				gameLoop();
+			});
+
+			window.addEventListener("gamepaddisconnected", function(e) {
+				cancelRequestAnimationFrame(start);
+			});
+
+			var interval;
+
+			if (!('ongamepadconnected' in window)) {
+				interval = setInterval(pollGamepads, 500);
+			}
+
+			function pollGamepads() {
+				var gamepads = navigator.getGamepads ? navigator.getGamepads()
+						: (navigator.webkitGetGamepads ? navigator.webkitGetGamepads
+								: []);
+				for (var i = 0; i < gamepads.length; i++) {
+					var gp = gamepads[i];
+					if (gp) {
+						gameLoop();
+						clearInterval(interval);
+					}
+				}
+			}
+
+			function buttonPressed(b) {
+				if (typeof (b) == "object") {
+					return b.pressed;
+				}
+				return b == 1.0;
+			}
+			var count = 0
+
+			function gameLoop() {
+				var gamepads = navigator.getGamepads ? navigator.getGamepads()
+						: (navigator.webkitGetGamepads ? navigator.webkitGetGamepads
+								: []);
+				if (!gamepads) {
+					return;
+				}
+				var message = null;
+				var gp = gamepads[0];
+				
+				if (buttonPressed(gp.buttons[5])) {
+					count++;
+					if (count > 8) {
+						message2 = "MODEON"
+						ctrlflags = true;
+						message = new Paho.MQTT.Message(message2);
+						message.destinationName = "/order/mode";
+						client.send(message);
+						let ret = window
+								.open(
+										"http://localhost:8080/project/home/ManualControl.do",
+										"_self");
+						count = 0;
+					}
+				}
+
+				 start = requestAnimationFrame(gameLoop);
+			}
 		</script>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;AUTO</a>
+		  <a class="navbar-brand" style="font-weight: bold; margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;AUTO</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
 		  </button>
@@ -405,45 +472,69 @@
 		      </li>
 		    </ul>
 		    <form class="form-inline my-2 my-lg-0">
-		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
-		    	<a class="navbar-brand" href="ManualControl.do">Convert to Manual Control Mode</a>	
+		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do" style="font-weight: bold">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		    	<a class="navbar-brand" href="ManualControl.do" style="font-weight: bold" >Convert to Manual Control Mode</a>	
 		    </form>
 		  </div>
 		</nav>
 
-		<div class="container-fluid" style="background-color: black;height:100%">
-		
+		<div class="container-fluid" style="background-color: black; height:100%">
+			
+			<!-- DISTANCE GRAPH -->
 			<div class="col">
 				<div>
-					<div style = "width:97%;  height:300px; margin-left: 20px; margin-top: 0px">
-						<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
-						<figure class="highcharts-figure" style="float:right; padding-right: 50px; padding-top: 50px">
+					<div style = "width:97%;  height:300px; margin-left: 20px">
+						<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 40px; padding-left: 100px;"></div>
+						
+						<!-- GAS Graph -->
+						<figure class="highcharts-figure" style="float:right; padding-right: 150px; padding-top: 50px">
+						    <input value="Gas Detect Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 15px; margin-right: 200px; background-color: transparent; font-size: 20px;"/>
 						    <div id="gas-detecter"  class="chart-container"></div>
 						</figure>
+						
 					</div>
 				</div>
 			</div>
 			
+			<!-- BRIGHTNESS GRAPH -->
 			<div class="col">
 				<div>
-					<div style = "width:97%; height:300px; margin-left: 20px;margin-top: 50px">
-						<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px">
+						<div id="container2" class="chart_container" style="width:30%;  height:280px; padding-top: 20px; padding-left: 100px;"></div>
 					</div>
 				</div>
 			</div>
 			
+			<!-- TEMPERATURE GRAPH -->
 			<div class="col">
 				<div>
-					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px;margin-bottom:0px">
-						<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
+					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px">
+						<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 100px;"></div>
 					</div>
 				</div>
 			</div>
 			
-			<div><img id=attack_img style="position:absolute; color:red;right:0; top:0 ;margin-top: 70px; margin-right: 800px;width: 550px;height:280px"/></div>
-			<div><img id=mine_img  style="position:absolute; color:red;right:0; top:0 ;margin-top: 440px; margin-right: 100px;width: 270px;height:220px"/></div>
-			<div><img id=heat_img  style="position:absolute; color:red;right:0; top:0;margin-top: 750px; margin-right: 100px;width: 220px;height:220px"/></div>
-			<div><img id=night_img style="position:absolute; color:red;right:0; top:0;margin-top: 420px; margin-right: 800px;width: 550px;height:280px"/></div>
+			<!-- IMAGE AND CAPTION FOR EACH AUTO SENSING MODE -->	
+			<div>
+				<input value="Enemy Detect Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 70px; margin-right: 880px; background-color: transparent; font-size: 20px;"/>
+				<img id=attack_img style="position:absolute; color:red;right:0; top:0; margin-top: 100px; margin-right: 720px;width: 600px;height:280px"/>
+			</div>
+			<div>
+				<input value="Land Mine Detect" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 390px; margin-right: 250px; background-color: transparent; font-size: 20px;"/>
+				<img id=mine_img  style="position:absolute; color:red;right:0; top:0; margin-top: 400px; margin-right: 200px; width:350px; height:300px"/>
+			</div>
+			<div>
+				<input value="Motor Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 740px; margin-right: 250px; background-color: transparent; font-size: 20px;"/>
+				<img id= heat_img style="position:absolute; color:red;right:0; top:0; margin-top: 770px; margin-right: 250px;width: 300px;height:270px"/>
+			</div>
+			<div>
+				<input value="Night Mode Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 390px; margin-right: 880px; background-color: transparent; font-size: 20px;"/>
+				<img id=night_img style="position:absolute; color:red;right:0; top:0; margin-top: 420px; margin-right: 720px;width: 600px;height:280px"/>
+			</div>
+			<div>
+				<input value="Camera Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 740px; margin-right: 880px; background-color: transparent; font-size: 20px;"/>
+				<img id=cameraView style="position:absolute; color:red;right:0; top:0; margin-top: 770px; margin-right: 720px;width: 600px;height:280px"/>
+			</div>
 		</div>
 	</body>
 </html>
