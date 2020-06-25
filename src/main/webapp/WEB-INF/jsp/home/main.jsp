@@ -1,26 +1,71 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ taglib prefix = "spring" uri = "http://www.springframework.org/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="UTF-8">
-		<title>Insert title here</title>
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
-		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
-		<script src="${pageContext.request.contextPath}/resource/bootstrap/js/bootstrap.min.js"></script>
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.css">
-		<script src="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.js"></script>
-		
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
+		<style>
+			body {
+			  font-family: Arial;
+			  color: white;
+			}
+			
+			.split {
+			  height: 100%;
+			  width: 50%;
+			  position: fixed;
+			  z-index: 1;
+			  top: 0;
+			  overflow-x: hidden;
+			  padding-top: 20px;
+			}
+			
+			.left {
+			  left: 0;
+			  background-color: #111;
+			}
+			
+			.right {
+			  right: 0;
+			  background-color: darkolivegreen;
+			}
+			
+			.centered {
+			  position: absolute;
+			  top: 50%;
+			  left: 50%;
+			  transform: translate(-50%, -50%);
+			  text-align: center;
+			}
+			
+			.centered img {
+			  width: 500px;
+			  border-radius: 70%;
+			}
+		</style>
 	</head>
 	<body>
-		<h5 class="alert alert-info">/home/main.jsp</h5>
+		<div class="split left">
+		  <div class="centered">
+		   	<a href="ManualControl.do">
+			   <img src="${pageContext.request.contextPath}/resource/img/tank2.jpg">
+			</a>
+			
+		    <h2>Manual Control Mode</h2>
+		    <p>Accessing Manual Operation of M1 Abrams</p>
+		  </div>
+		</div>
 		
-			<div><a href="iotProject.do">Controll</a></div>
-			<div><a href="ultraGraph.do">Observe</a></div>	
+		<div class="split right">
+		  <div class="centered">
+		  
+		  	<a href="AutoControl.do">
+			   <img src="${pageContext.request.contextPath}/resource/img/tank1.jpg">
+			</a>
+			
+		    <h2>Auto Control Mode</h2>
+		    <p>Accessing Auto-Sensing Operation mode of M1 Abrams</p>
+		    
+		  </div>
+		</div>
 	</body>
-</html>
+</html> 

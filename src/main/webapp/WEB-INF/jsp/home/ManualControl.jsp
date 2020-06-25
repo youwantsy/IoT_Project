@@ -29,6 +29,10 @@
 				client.subscribe("/sensor");
 				client.subscribe("/camerapub");
 				client.subscribe("/ultra");
+				
+				message = new Paho.MQTT.Message('MODEON');
+				message.destinationName = "/order/mode";
+				client.send(message);
 			}
 
 			function onMessageArrived(message) {
@@ -59,7 +63,6 @@
 					message2 = value
 					message = new Paho.MQTT.Message(message2);
 
-//////////////////////////////////////////////////////////   LED   /////////////////////////////////////////////////////////////////
 					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 == "W" || message2 =="N"){
 						message.destinationName = "/order/led";
 						if(message2 == "N"){
@@ -529,8 +532,24 @@
 				</style>
 	</head>
 	<body>
+	
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand" href="#" style="margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;MANUAL</a>
+		  <a class="navbar-brand">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;MANUAL</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		    <ul class="navbar-nav mr-auto">
+		      <li class="nav-item active">
+		        <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a>
+		      </li>
+		    </ul>
+		    <form class="form-inline my-2 my-lg-0">
+		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		    	<a class="navbar-brand" href="AutoControl.do">Convert to Auto Sensing Mode</a>
+		    </form>
+		  </div>
 		</nav>
 
 		<div id="hiyo" style="background-repeat : no-repeat; background-size : cover;">
@@ -550,7 +569,7 @@
 			  <div class="input-group-prepend">
 			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current LED Status</span>
 			  </div>
-			  <input id="CurrentLed" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			  <input id="CurrentLed" value="LED OFF" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 		</div>
 
@@ -566,7 +585,7 @@
 			  <div class="input-group-prepend">
 			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Buzzer Status</span>
 			  </div>
-			  <input id="CurrentBuzzer" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			  <input id="CurrentBuzzer" value="BUZZER OFF" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 		</div>
 
@@ -582,7 +601,7 @@
 			  <div class="input-group-prepend">
 			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Laser Status</span>
 			  </div>
-			  <input id="CurrentLaser" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			  <input id="CurrentLaser" value="LASER RELEASED" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 		</div>
 
@@ -598,11 +617,11 @@
 			  <div class="input-group-prepend">
 			    <span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px;">Current LCD Status</span>
 			  </div>
-			  <input id="CurrentLcd" value= "" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			  <input id="CurrentLcd" value= "LCD SCREEN OFF" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 		</div>			
 
- 		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; " >
+ 		<div style="width: 470px; height:150px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center;visibility: hidden " >
  			<div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
 				  <div class="btn-group mr-2" role="group" aria-label="First group" style="width: 400px;height:50px; margin-left: 30px; margin-top: 15px">
 						<button onclick="fun1('MODEON')" class="btn btn-secondary" style="width: 200px">MANUAL MODE ON</button>
@@ -612,9 +631,9 @@
 
 			<div class="input-group mb-3" style="width: 400px; margin-left: 30px">
 			  <div class="input-group-prepend">
-			    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px">Current Mode Status</span>
+			    	<span class="input-group-text" id="inputGroup-sizing-default" style="width: 200px"></span>
 			  </div>
-			  	<input id="CurrentMODE" value="" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+			  	<input id="CurrentMODE" value="MANUAL MODE ON" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
 			</div>
 		</div>
 		
@@ -688,6 +707,7 @@
 				    $("#image_canv").rotate({animateTo:value})
 				}
 			}
+			
 			$("#wheelstop").on('click',function(event){ funrotate(0)})
 			$("#wheelselects").on('mousewheel',function(event){ funrotate(0)});
 			$("#wheelselects").on('change',function(event){ funrotate(0)});

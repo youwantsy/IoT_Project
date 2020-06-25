@@ -5,17 +5,16 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>highcharts</title>
-		<link rel="stylesheet" href="<%=application.getContextPath()%>/resources/bootstrap/css/bootstrap.min.css">
-		<script src="<%=application.getContextPath()%>/resources/javascript/jquery.min.js"></script>
-		<script src="<%=application.getContextPath()%>/resources/bootstrap/js/bootstrap.min.js"></script>	
-		
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/bootstrap/css/bootstrap.min.css">
+		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
+		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/jquery/jquery.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/popper/popper.min.js"></script>
 		<script src="${pageContext.request.contextPath}/resource/bootstrap/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.css">
 		<script src="${pageContext.request.contextPath}/resource/jquery-ui/jquery-ui.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
-		
+
 		<script src="https://code.highcharts.com/highcharts.js"></script>
 		<script src="https://code.highcharts.com/highcharts-more.js"></script>
 		<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
@@ -25,12 +24,13 @@
 		<script src="<%=application.getContextPath()%>/resources/highcharts/code/themes/gray.js"></script>
 		
 		<script src="${pageContext.request.contextPath}/resource/js/toggle_and_hover.js"></script>
-		
-		<!-- 택만씨가 넣은 부분 : 문제가 될 경우 빼버린다. -->
+
+		<!-- 이미지 위에 커서 있을 때 확대 되는 css chart_container:hover 까지 -->
 		<style type="text/css">
 	    	.toggleBG{background: #CCCCCC; width: 70px; height: 30px; border: 1px solid #CCCCCC; border-radius: 15px;}
 	    	.toggleFG{background: #FFFFFF; width: 30px; height: 30px; border: none; border-radius: 15px; position: relative; left: 0px;}
 		</style>
+		
 		<style>
 		    .chart_container {
 		    	overflow:hidden;
@@ -53,7 +53,6 @@
 		        transform:scale(1.2);
 		    }
         </style>
-		<!-- 택만씨가 넣은 부분 마지막 부분: 문제가 될 경우 빼버린다. -->
 		<style>
 		.highcharts-figure .chart-container {
 			width: 300px;
@@ -110,17 +109,22 @@
 		<script>
 			
 		ggas = 0;
+			var chart;
+			
 			$(function(){
 				client = new Paho.MQTT.Client(location.hostname, 61614, new Date().getTime().toString());
 				client.onMessageArrived = onMessageArrived;
 				client.connect({onSuccess:onConnect});
-				
 			});
-			var chart;
+
 			function onConnect(){
 				console.log("mqtt broker connected")
 				client.subscribe("/ultra");
 				client.subscribe("/sensor");
+				
+				message = new Paho.MQTT.Message('MODEOFF');
+				message.destinationName = "/order/mode";
+				client.send(message);
 			}
 
 			function onMessageArrived(message) {					
@@ -132,10 +136,10 @@
 		            var shift = series.data.length > 20;
 		           	console.log(series.data)		            
 
- 					const nDate = new Date();//.toLocaleString("ko-KR", {timeZone: "Asia/Seoul"});
+ 					const nDate = new Date();
 					console.log(nDate);
 					//var v = nDate.getSeconds();
-					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
+					var v = nDate.getTime()+32400000;
 		           // console.log(v);
 					var t = parseFloat(parseFloat(obj2.Ultrasonic).toFixed(2)) 
 					var a= {x:v,y:t}
@@ -147,21 +151,17 @@
 		            else if (t > 7){
 		            	$("#attack_img").attr("src", "${pageContext.request.contextPath}/resource/img/normal.jpg")
 		            }
-					
-		            
 				}
- 				if(message.destinationName =="/sensor") 
-				{	
+ 				if(message.destinationName =="/sensor") {	
 					const json2 = message.payloadString;
 					const obj2 = JSON.parse(json2);
 					var series = chart.series[0];
 		            var shift = series.data.length > 20;
 		           	console.log(series.data)
 		            
-
  					const nDate = new Date();
 					console.log(nDate);
-					var v = nDate.getTime()+32400000; // 9시간을 더해서 대한민국 시간에 맞춤
+					var v = nDate.getTime()+32400000;
 					
 					var t = parseFloat(parseFloat(obj2.Thermister).toFixed(2)) 
 					var vision = parseFloat(parseFloat(obj2.Photoresister))
@@ -319,7 +319,6 @@
 						    tooltip: {
 						        enabled: false
 						    },
-
 						    // the value axis
 						    yAxis: {
 						        stops: [
@@ -338,7 +337,6 @@
 						            y: 16
 						        }
 						    },
-
 						    plotOptions: {
 						        solidgauge: {
 						            dataLabels: {
@@ -359,11 +357,9 @@
 				             text: 'Gas'
 				         }
 				     },
-
 				     credits: {
 				         enabled: false
 				     },
-
 				     series: [{
 				         name: 'Gas',
 				         data: [0],
@@ -378,7 +374,6 @@
 				             valueSuffix: 'wei'
 				         }
 				     }]
-
 				 }));
 
 				 // Bring life to the dials
@@ -392,25 +387,35 @@
 				         if (ggas > 0 || ggas < 100) {
 					         point.update(ggas);
 				         }
-
 				     }
 				 }, 1000);
-
-				 
 			 });
 		</script>
-		
-		
 	<body>
-		
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		  <a class="navbar-brand" href="#" style="margin-left: 20px">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;AUTO</a>
+		  <a class="navbar-brand">Current Mode Status:&nbsp;&nbsp;&nbsp;&nbsp;AUTO</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+		
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  	<ul class="navbar-nav mr-auto">
+		      <li class="nav-item active">
+		        <a class="nav-link" href="#"> <span class="sr-only">(current)</span></a>
+		      </li>
+		    </ul>
+		    <form class="form-inline my-2 my-lg-0">
+		    	<a class="navbar-brand" href="${pageContext.request.contextPath}/home/main.do">HOME&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+		    	<a class="navbar-brand" href="ManualControl.do">Convert to Manual Control Mode</a>	
+		    </form>
+		  </div>
 		</nav>
-		<div></div>
-		<div class="container-fluid" style="background-color: black;">
+
+		<div class="container-fluid" style="background-color: black;height:100%">
+		
 			<div class="col">
 				<div>
-					<div style = "width:97%;  height:300px; margin-left: 20px; margin-top: 50px">
+					<div style = "width:97%;  height:300px; margin-left: 20px; margin-top: 0px">
 						<div id="container" class="chart_container" style="width:30%; float:left; height:280px; padding-top: 20px; padding-left: 25px;"></div>
 						<figure class="highcharts-figure" style="float:right; padding-right: 50px; padding-top: 50px">
 						    <div id="gas-detecter"  class="chart-container"></div>
@@ -418,6 +423,7 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="col">
 				<div>
 					<div style = "width:97%; height:300px; margin-left: 20px;margin-top: 50px">
@@ -425,17 +431,19 @@
 					</div>
 				</div>
 			</div>
+			
 			<div class="col">
 				<div>
-					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px;margin-bottom:20px">
+					<div style = "width:97%; height:300px; margin-left: 20px; margin-top: 50px;margin-bottom:0px">
 						<div id="container3" class="chart_container" style="width:30%; height:280px; padding-top: 20px; padding-left: 25px;"></div>
 					</div>
 				</div>
 			</div>
-			<div><img id=attack_img style="position:absolute; color:red;right:0; top:0 ;margin-top: 140px; margin-right: 800px;width: 500px;height:280px"/></div>
-			<div><img id=mine_img  style="position:absolute; color:red;right:0; top:0 ;margin-top: 490px; margin-right: 100px;width: 270px;height:220px"/></div>
-			<div><img id=heat_img  style="position:absolute; color:red;right:0; top:0;margin-top: 830px; margin-right: 100px;width: 220px;height:220px"/></div>
-			<div><img id=night_img style="position:absolute; color:red;right:0; top:0;margin-top: 490px; margin-right: 800px;width: 500px;height:280px"/></div>
+			
+			<div><img id=attack_img style="position:absolute; color:red;right:0; top:0 ;margin-top: 70px; margin-right: 800px;width: 550px;height:280px"/></div>
+			<div><img id=mine_img  style="position:absolute; color:red;right:0; top:0 ;margin-top: 440px; margin-right: 100px;width: 270px;height:220px"/></div>
+			<div><img id=heat_img  style="position:absolute; color:red;right:0; top:0;margin-top: 750px; margin-right: 100px;width: 220px;height:220px"/></div>
+			<div><img id=night_img style="position:absolute; color:red;right:0; top:0;margin-top: 420px; margin-right: 800px;width: 550px;height:280px"/></div>
 		</div>
 	</body>
-</html>			
+</html>

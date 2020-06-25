@@ -11,33 +11,18 @@ public class HomeController
 	private static final Logger LOGGER = LoggerFactory.getLogger(HomeController.class);
 
 	@RequestMapping("/main.do") 
-	public String main(String Ledvalue) throws Exception
-	{
+	public String main(String Ledvalue) throws Exception{
 		LOGGER.info("실행");
 		return "home/main";
 	}
 	
-	@RequestMapping("/iotProject.do")
-	public String iotProject(){
+	@RequestMapping("/ManualControl.do")
+	public String manual(){
 		LOGGER.info("실행");
-		return "home/iotProject";
+		return "home/ManualControl";
 	}
-	
-	@RequestMapping("/distanceView.do")
-	public String distanceView(){
-		LOGGER.info("실행");
-		return "home/distanceView";
-	}
-	@RequestMapping("/ultraGraph.do")
-	public String ultra() {
-		return "home/ultraGraph"; 
-	}
-	@RequestMapping("/temperatureGraph.do")
-	public String temperature() {
-		return "home/temperatureGraph"; 
-	}
-	@RequestMapping("/gasGraph.do")
-	public String gas() {
-		return "home/gasGraph"; 
+	@RequestMapping("/AutoControl.do")
+	public String auto() {
+		return "home/AutoControl"; 
 	}
 }
