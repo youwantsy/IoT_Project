@@ -524,8 +524,8 @@
 				<img id=mine_img  style="position:absolute; color:red;right:0; top:0; margin-top: 400px; margin-right: 200px; width:350px; height:300px"/>
 			</div>
 			<div>
-				<input value="Motor Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 740px; margin-right: 250px; background-color: transparent; font-size: 20px;"/>
-				<img id= heat_img style="position:absolute; color:red;right:0; top:0; margin-top: 770px; margin-right: 250px;width: 300px;height:270px"/>
+				<input value="Motor Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 740px; margin-right: 220px; background-color: transparent; font-size: 20px;"/>
+				<img id= heat_img style="position:absolute; color:red;right:0; top:0; margin-top: 770px; margin-right: 220px;width: 300px;height:270px"/>
 			</div>
 			<div>
 				<input value="Night Mode Status" style="border:none; position:absolute; color:white; right:0; top:0; margin-top: 390px; margin-right: 880px; background-color: transparent; font-size: 20px;"/>

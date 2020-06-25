@@ -47,11 +47,11 @@
 		<div class="split left">
 		  <div class="centered">
 		   	<a href="ManualControl.do">
-			   <img src="${pageContext.request.contextPath}/resource/img/tank2.jpg">
+			   <img src="${pageContext.request.contextPath}/resource/img/main1.jpg">
 			</a>
 			
 		    <h2>Manual Control Mode</h2>
-		    <p>Accessing Manual Operation of M1 Abrams</p>
+		    <p>Accessing Manual Operation mode of M1 Abrams</p>
 		  </div>
 		</div>
 		
@@ -59,7 +59,7 @@
 		  <div class="centered">
 		  
 		  	<a href="AutoControl.do">
-			   <img src="${pageContext.request.contextPath}/resource/img/tank1.jpg">
+			   <img src="${pageContext.request.contextPath}/resource/img/main2.jpg">
 			</a>
 			
 		    <h2>Auto Control Mode</h2>
