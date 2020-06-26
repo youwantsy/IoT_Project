@@ -131,8 +131,7 @@
 			function onMessageArrived(message) {					
 				if(message.destinationName =="/ultra"){	
 					const json2 = message.payloadString;
-					const obj2 = JSON.parse(js
-							on2);
+					const obj2 = JSON.parse(json2);
 					var series = chart.series[0];
 		            var shift = series.data.length > 20;
 		           	console.log(series.data)		            
@@ -192,7 +191,7 @@
 		            else if (vision >= 120){
 		            	$("#night_img").attr("src", "${pageContext.request.contextPath}/resource/img/night.jpg")
 		            }
-				} 
+				}                                                                                                                          -+
 			}
 		
 			$(function() {
@@ -451,7 +450,7 @@
 						client.send(message);
 						let ret = window
 								.open(
-										"http://localhost:8080/project/home/ManualControl.do",
+										"http://192.168.3.177:8080/project/home/ManualControl.do",
 										"_self");
 						count = 0;
 					}

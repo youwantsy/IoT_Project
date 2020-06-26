@@ -121,10 +121,12 @@
 				var start;
 				window.addEventListener("gamepadconnected", function(e) {
 					  var gp = navigator.getGamepads()[e.gamepad.index];
+					  console.log("connected");
 					  gameLoop();
 				});
 
 				window.addEventListener("gamepaddisconnected", function(e) {
+					console.log("disconnected");
 					  cancelRequestAnimationFrame(start);
 				});
 
@@ -178,7 +180,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								let ret = window.open("http://localhost:8080/project/home/AutoControl.do", "_self");
+								let ret = window.open("http://192.168.3.177:8080/project/home/AutoControl.do", "_self");
 								count = 0;
 							}
 						 }
@@ -191,7 +193,7 @@
 								message = new Paho.MQTT.Message(message2);
 								message.destinationName = "/order/mode";
 								client.send(message);
-								let ret = window.open("http://localhost:8080/project/home/ManualControl.do", "_self");
+								let ret = window.open("http://192.168.3.177:8080/project/home/ManualControl.do", "_self");
 								count = 0;
 							 }
 						 }
@@ -228,8 +230,10 @@
 						    }
 					 } else if (buttonPressed(gp.buttons[3]) && ctrlflags == true){
 						  count++;
+						  console.log("hi")
 						    if (count >8){
 							    message2 = "W"
+							    
 							    message = new Paho.MQTT.Message(message2);
 							    message.destinationName = "/order/led";
 							    client.send(message);
@@ -430,6 +434,11 @@
 						    message = new Paho.MQTT.Message("SU"+message2);
 						    message.destinationName = "/order/su";
 						    client.send(message);
+						    dc=0;
+						    svgo = 20;
+							shgo = 90;
+							swgo = 90;
+							sugo = 90;
 						    $("#CurrentSH").attr("value", "SH " + message2);
 						    $("#CurrentSV").attr("value", "SV " + message2);
 						    $("#CurrentSW").attr("value", "SW " + message2);
