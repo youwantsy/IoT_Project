@@ -62,7 +62,7 @@
 				function fun1(value) {
 					message2 = value
 					message = new Paho.MQTT.Message(message2);
-
+					
 					if (message2 == "R" || message2 == "G" || message2 == "B" || message2 == "W" || message2 =="N"){
 						message.destinationName = "/order/led";
 						if(message2 == "N"){
@@ -70,12 +70,12 @@
 						} else
 							$("#CurrentLed").attr("value","LED ("+ message2 + ") ON");
 					}
-
+					
 					if (message2 == "ON" || message2 == "OFF"){
 						message.destinationName = "/order/buzzer";
 						$("#CurrentBuzzer").attr("value", "BUZZER " + message2);
 					}
-
+					
 					if (message2 == "ENABLE" || message2 == "DISABLE"){
 						message.destinationName = "/order/laser";
 						$("#CurrentLaser").attr("value", "LASER " + message2)
@@ -218,7 +218,7 @@
 						    }
 					  } else if (buttonPressed(gp.buttons[2]) && ctrlflags == true){
 						  count++;
-						    if (count >8){
+						    if (count >8){						    	
 							    message2 = "B"
 							    message = new Paho.MQTT.Message(message2);
 							    message.destinationName = "/order/led";
@@ -482,7 +482,7 @@
 						    $("#wheelselects").val(swgo)
 						    $("#ultraselects").val(sugo)
 					 }
-					 console.log(gp.axes[1])
+					// console.log(gp.axes[1])
 					 start = requestAnimationFrame(gameLoop);
 				}
 				</script>
@@ -637,7 +637,7 @@
 			</div>
 		</div>
 		
-		<img id=image_canv src="${pageContext.request.contextPath}/resource/img/tank.png" style="position:fixed; right:0; top:0 ;margin-top: 350px; margin-right: 30px"/>
+		<img id=image_tank src="${pageContext.request.contextPath}/resource/img/tank.png" style="position:fixed; right:0; top:0 ;margin-top: 350px; margin-right: 30px"/>
 		
 		<div style="width: 580px; height:250px; margin-left: 20px; background-color:gainsboro; opacity: 0.9; margin-top: 20px;align-content: center; position: absolute; right:0; top:0; margin-right: 30px; margin-top: 55px" >
 			<div class="input-group">
@@ -700,11 +700,11 @@
 			function funrotate(data=0){
 				if(data ==0){
 			      value= ($(wheelselects).val()-90);
-			      $("#image_canv").rotate({animateTo:value})
+			      $("#image_tank").rotate({animateTo:value})
 				}
 				else{
 					let value= data-90;
-				    $("#image_canv").rotate({animateTo:value})
+				    $("#image_tank").rotate({animateTo:value})
 				}
 			}
 			

@@ -131,7 +131,8 @@
 			function onMessageArrived(message) {					
 				if(message.destinationName =="/ultra"){	
 					const json2 = message.payloadString;
-					const obj2 = JSON.parse(json2);
+					const obj2 = JSON.parse(js
+							on2);
 					var series = chart.series[0];
 		            var shift = series.data.length > 20;
 		           	console.log(series.data)		            
