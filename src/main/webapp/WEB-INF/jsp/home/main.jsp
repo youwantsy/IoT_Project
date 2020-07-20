@@ -2,7 +2,7 @@
 <html>
 	<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>M1 ABRAMS | Control Home</title>
+	<title>Home</title>
 	
 		<style>
 			body {
@@ -47,12 +47,12 @@
 	<body>
 		<div class="split left">
 		  <div class="centered">
-		   	<a href="ManualControl.do">
+		   	<a href="MainControl.do">
 			   <img src="${pageContext.request.contextPath}/resource/img/main1.jpg">
 			</a>
 			
-		    <h2>Manual Control Mode</h2>
-		    <p>Accessing Manual Operation mode of M1 Abrams</p>
+		    <h2>Main Control Mode</h2>
+		    <p>Main Main Main</p>
 		  </div>
 		</div>
 		
@@ -64,7 +64,7 @@
 			</a>
 			
 		    <h2>Auto Control Mode</h2>
-		    <p>Accessing Auto-Sensing Operation mode of M1 Abrams</p>
+		    <p>Auto Auto Auto</p>
 		    
 		  </div>
 		</div>

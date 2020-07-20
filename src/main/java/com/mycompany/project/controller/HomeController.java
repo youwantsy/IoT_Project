@@ -16,13 +16,9 @@ public class HomeController
 		return "home/main";
 	}
 	
-	@RequestMapping("/ManualControl.do")
+	@RequestMapping("/MainControl.do")
 	public String manual(){
 		LOGGER.info("실행");
-		return "home/ManualControl";
-	}
-	@RequestMapping("/AutoControl.do")
-	public String auto() {
-		return "home/AutoControl"; 
+		return "home/MainControl";
 	}
 }

@@ -1,0 +1,28 @@
+
+#content{
+	padding:30px;
+	text-align: center;
+}
+#bigImages{
+	margin-bottom: 10px;
+	position: relative;
+}
+
+#bigImages div{
+	position: absolute;
+	top:10%;
+	left:50%;
+	transform: translate(-50%, -50%); 
+	background-color:transparent;
+	color: black;
+	font-size: 30px
+}
+
+.big{
+	width: 450px;
+	height:450px;
+}
+.small{
+	width: 150px;
+	height: 150px;
+}
